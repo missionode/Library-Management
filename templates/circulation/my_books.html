@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">My Borrow History</h1>
+</div>
+
+{% if borrow_records %}
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg border">
+        <ul class="divide-y divide-gray-200">
+            {% for record in borrow_records %}
+                <li class="p-6 hover:bg-gray-50 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <!-- Book Status Icon -->
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full flex items-center justify-center 
+                                {% if record.status == 'RETURNED' %}bg-gray-100 text-gray-500
+                                {% elif record.status == 'LOST' %}bg-red-100 text-red-500
+                                {% elif record.is_overdue %}bg-red-100 text-red-600
+                                {% else %}bg-green-100 text-green-600{% endif %}">
+                                {% if record.status == 'RETURNED' %}✔
+                                {% elif record.status == 'LOST' %}✖
+                                {% else %}📖{% endif %}
+                            </div>
+                            
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">{{ record.book.title }}</h3>
+                                <div class="text-sm text-gray-500 space-x-2">
+                                    <span>Issued: {{ record.issued_date|date:"M d, Y" }}</span>
+                                    <span>•</span>
+                                    <span class="{% if record.is_overdue and record.status == 'ISSUED' %}text-red-600 font-bold{% endif %}">
+                                        Due: {{ record.due_date|date:"M d, Y" }}
+                                    </span>
+                                    {% if record.return_date %}
+                                        <span>•</span>
+                                        <span>Returned: {{ record.return_date|date:"M d, Y" }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-end">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if record.status == 'RETURNED' %}bg-gray-100 text-gray-800
+                                {% elif record.status == 'LOST' %}bg-red-100 text-red-800
+                                {% elif record.is_overdue %}bg-red-100 text-red-800
+                                {% else %}bg-green-100 text-green-800{% endif %}">
+                                {% if record.is_overdue and record.status == 'ISSUED' %}
+                                    OVERDUE
+                                {% else %}
+                                    {{ record.get_status_display }}
+                                {% endif %}
+                            </span>
+                            
+                            {% if record.status == 'ISSUED' %}
+                                <form action="{% url 'renew_book' record.pk %}" method="post" class="mt-2">
+                                    {% csrf_token %}
+                                    <button type="submit" class="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded hover:bg-emerald-200 transition">
+                                        Renew ({{ record.renewal_count }}/{{ user.membership_tier.max_renewals|default:1 }})
+                                    </button>
+                                </form>
+                            {% endif %}
+                            
+                            {% if record.fine_amount > 0 %}
+                                <span class="mt-2 text-red-600 text-sm font-bold">Fine: ${{ record.fine_amount }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+    <div class="text-center py-20 bg-white rounded-lg shadow-sm border">
+        <h3 class="text-xl text-gray-500">You haven't borrowed any books yet.</h3>
+        <a href="{% url 'book_list' %}" class="text-primary mt-4 inline-block font-medium">Browse Catalog</a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-8 flex justify-between items-center">
+    <h1 class="text-3xl font-bold text-gray-900">Library Analytics</h1>
+    <div class="text-sm text-gray-500">Last updated: {% now "M d, Y H:i" %}</div>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    
+    <!-- Borrowed This Month -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-emerald-100">
+        <p class="text-sm font-medium text-gray-500 uppercase">Borrowed (This Month)</p>
+        <p class="text-3xl font-bold text-primary">{{ borrowed_this_month }}</p>
+    </div>
+
+    <!-- Overdue -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-red-100">
+        <p class="text-sm font-medium text-gray-500 uppercase">Active Overdue</p>
+        <p class="text-3xl font-bold text-red-600">{{ overdue_count }}</p>
+    </div>
+
+    <!-- Fines Collected -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-green-100">
+        <p class="text-sm font-medium text-gray-500 uppercase">Total Fines Collected</p>
+        <p class="text-3xl font-bold text-green-600">${{ total_fines }}</p>
+    </div>
+
+    <!-- Lost Books -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <p class="text-sm font-medium text-gray-500 uppercase">Lost Books</p>
+        <p class="text-3xl font-bold text-gray-800">{{ lost_count }}</p>
+    </div>
+
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    
+    <!-- Most Popular Books -->
+    <div class="bg-white rounded-xl shadow-sm border">
+        <div class="p-6 border-b">
+            <h2 class="text-lg font-bold text-gray-900">🔥 Most Popular Books</h2>
+        </div>
+        <div class="p-6">
+            <ul class="space-y-4">
+                {% for book in popular_books %}
+                    <li class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-xs font-bold mr-3">{{ forloop.counter }}</span>
+                            <div>
+                                <p class="font-medium text-gray-800">{{ book.title }}</p>
+                                <p class="text-xs text-gray-500">{{ book.author.name }}</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-semibold text-primary bg-emerald-50 px-3 py-1 rounded-full">
+                            {{ book.borrow_count }} borrows
+                        </span>
+                    </li>
+                {% empty %}
+                    <li class="text-gray-500 text-center py-4">No borrow data available yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- System Quick Reports -->
+    <div class="bg-white rounded-xl shadow-sm border">
+        <div class="p-6 border-b">
+            <h2 class="text-lg font-bold text-gray-900">📄 Quick Reports</h2>
+        </div>
+        <div class="p-6 space-y-4">
+            <button onclick="window.print()" class="w-full flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition">
+                <span>Print System Overview</span>
+                <span class="text-gray-400">🖨️</span>
+            </button>
+            <p class="text-xs text-gray-500 mt-4 italic">
+                Note: Advanced CSV/PDF export can be integrated using reportlab or pandas in production.
+            </p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

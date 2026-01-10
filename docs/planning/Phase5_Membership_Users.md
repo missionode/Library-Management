@@ -1,0 +1,38 @@
+# Phase 5: Membership & User Administration - ✅ COMPLETED
+
+## 1. Overview
+**Goal:** Empower Librarians to manage the member base directly and introduce a "Subscription" model to monetize or categorize access (e.g., Basic vs Premium).
+
+## 2. Database Models
+
+#### `MembershipTier`
+*   `name`: CharField (e.g., "Basic", "Premium", "Student")
+*   `max_books`: IntegerField (Limit on concurrent borrows)
+*   `borrow_duration_days`: IntegerField (Overrides book default if set, or acts as a multiplier)
+*   `subscription_fee`: DecimalField
+*   `is_active`: BooleanField
+
+#### `User` (Update)
+*   `membership_tier`: ForeignKey -> `MembershipTier`
+*   `is_active_member`: BooleanField (For soft banning/blocking)
+
+## 3. Features
+
+### Librarian User Management
+*   **Member List View:** Searchable table of all users with role 'MEMBER'.
+*   **Member Detail View:** Show profile info, current active loans, fine history, and subscription status.
+*   **Actions:**
+    *   **Block/Unblock:** Toggle `is_active_member`.
+    *   **Change Tier:** Manually upgrade/downgrade a user.
+    *   **Reset Password:** (Optional, or send reset link).
+
+### Subscription Logic
+*   **Enforcement:** Update `IssueBookForm` to check:
+    *   Is user active?
+    *   `active_loans_count` < `user.membership_tier.max_books`?
+*   **Registration:** Update Registration form to select a Tier (or default to Free).
+
+## 4. Deliverables
+1.  `MembershipTier` model and fixtures.
+2.  Librarian "Member Management" Dashboard.
+3.  Updated Issue Logic to respect limits.

@@ -1,0 +1,5 @@
+Django>=6.0.0
+django-compressor>=4.4
+django-libsass>=0.9
+libsass>=0.23.0
+Pillow>=10.0.0

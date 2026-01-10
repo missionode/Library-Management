@@ -1,0 +1,277 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Archivus | The Future of Library Management</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-primary: #1A3C34;
+            --color-background-light: #F9FAFB;
+            --color-background-dark: #0F172A;
+            --font-display: "Outfit", sans-serif;
+            --font-sans: "Inter", sans-serif;
+            --radius-DEFAULT: 0.75rem;
+        }
+    </style>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@300;400;600;700&amp;family=Material+Icons&amp;display=swap" rel="stylesheet"/>
+    
+    <style>
+        .material-icons {
+            vertical-align: middle;
+            line-height: 1;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
+
+<nav class="fixed w-full z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+            <div class="flex items-center gap-2">
+                <a href="{% url 'home' %}">
+                    <!-- Light mode logo -->
+                    <img alt="Archivus Logo" class="h-10 w-auto dark:hidden" src="{% static 'images/logos/logo mark and brand name  dark.svg' %}"/>
+                    <!-- Dark mode logo -->
+                    <img alt="Archivus Logo" class="h-10 w-auto hidden dark:block" src="{% static 'images/logos/logo mark and brand name  light.svg' %}"/>
+                </a>
+            </div>
+            <div class="hidden md:flex items-center space-x-8 font-medium">
+                <a class="hover:text-primary transition-colors" href="#features">Features</a>
+                <a class="hover:text-primary transition-colors" href="{% url 'book_list' %}">Browse Catalog</a>
+                
+                {% if user.is_authenticated %}
+                    {% if user.role == 'MEMBER' %}
+                        <a class="hover:text-primary transition-colors" href="{% url 'my_books' %}">My Books</a>
+                    {% endif %}
+                    <form method="post" action="{% url 'logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:text-primary transition-colors">Logout</button>
+                    </form>
+                    <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'dashboard' %}">Dashboard</a>
+                {% else %}
+                    <a class="hover:text-primary transition-colors" href="{% url 'login' %}">Login</a>
+                    <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'register' %}">Register</a>
+                {% endif %}
+            </div>
+            <button class="md:hidden text-primary">
+                <span class="material-icons">menu</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-10 dark:opacity-5">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary rounded-full blur-[120px]"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-primary dark:text-emerald-400 text-sm font-semibold mb-6 tracking-wide uppercase">
+                Modernizing Knowledge Management
+            </span>
+            <h1 class="font-display text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-8">
+                The Future of <span class="text-primary italic">Library Management</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
+                Archivus empowers modern libraries with automated cataloging, real-time analytics, and seamless member engagement. Organize intelligence with precision.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                {% if user.is_authenticated %}
+                    <a class="w-full sm:w-auto px-8 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:scale-105 transition-transform shadow-xl shadow-primary/20" href="{% url 'book_list' %}">
+                        Explore Collection
+                    </a>
+                {% else %}
+                    <a class="w-full sm:w-auto px-8 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:scale-105 transition-transform shadow-xl shadow-primary/20" href="{% url 'register' %}">
+                        Get Started Today
+                    </a>
+                {% endif %}
+                <a class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-lg font-semibold rounded-full hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" href="#features">
+                    View Ecosystem
+                </a>
+            </div>
+        </div>
+        <div class="mt-20 relative">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div class="h-12 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex items-center px-6 gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                    <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                    <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                </div>
+                <div class="p-8 lg:p-12">
+                    <div class="grid grid-cols-12 gap-8">
+                        <div class="col-span-12 lg:col-span-4 space-y-6">
+                            <div class="h-32 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse"></div>
+                            <div class="h-64 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse"></div>
+                        </div>
+                        <div class="col-span-12 lg:col-span-8 space-y-6">
+                            <div class="h-[416px] rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 flex items-center justify-center">
+                                <span class="material-icons text-primary/20 text-9xl">dashboard</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-slate-50 dark:bg-slate-900/50" id="features">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-20">
+            <h2 class="font-display text-4xl font-bold mb-4 dark:text-white">Intelligent Core Features</h2>
+            <p class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">Sophisticated tools designed for the next generation of academic and public institutions.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="p-8 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group">
+                <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">auto_awesome</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3 dark:text-white">Automated Cataloging</h3>
+                <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Utilize metadata extraction and automated ISBN matching to populate your collection in seconds.
+                </p>
+            </div>
+            <div class="p-8 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group">
+                <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">bar_chart</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3 dark:text-white">Real-time Analytics</h3>
+                <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Deep insights into borrowing patterns, inventory health, and demographic engagement through visual heatmaps.
+                </p>
+            </div>
+            <div class="p-8 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group">
+                <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">account_circle</span>
+                </div>
+                <h3 class="text-xl font-bold mb-3 dark:text-white">Member Portals</h3>
+                <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Personalized digital experiences for members to reserve books, track reading progress, and manage renewals.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-24" id="testimonials">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-primary rounded-[2.5rem] overflow-hidden text-white">
+            <div class="grid lg:grid-cols-2">
+                <div class="p-12 lg:p-20 flex flex-col justify-center">
+                    <span class="material-icons text-5xl opacity-30 mb-8 text-emerald-300">format_quote</span>
+                    <blockquote class="text-3xl font-display leading-tight mb-10">
+                        "Archivus transformed our university library from a static storage space into a dynamic knowledge hub. The automated workflows saved us 20+ hours a week."
+                    </blockquote>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-emerald-800 flex items-center justify-center font-bold">ED</div>
+                        <div>
+                            <p class="font-bold">Eleanor Davies</p>
+                            <p class="text-emerald-300 text-sm">Head Librarian, St. Mark's Institute</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative hidden lg:block">
+                    <div class="absolute inset-0 bg-emerald-900/20"></div>
+                    <img alt="Modern Library Interior" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=1000"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="py-24 border-t border-slate-200 dark:border-slate-800" id="demo">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            <div>
+                <!-- Light mode footer logo -->
+                <img alt="Archivus Full Logo" class="h-12 mb-8 dark:hidden" src="{% static 'images/logos/logo mark and brand name  dark.svg' %}"/>
+                <!-- Dark mode footer logo -->
+                <img alt="Archivus Full Logo" class="h-12 mb-8 hidden dark:block" src="{% static 'images/logos/logo mark and brand name  light.svg' %}"/>
+                
+                <h2 class="font-display text-4xl font-bold mb-6 dark:text-white leading-tight">Ready to evolve your library system?</h2>
+                <p class="text-xl text-slate-600 dark:text-slate-400 mb-10">
+                    Join 200+ institutions worldwide that trust Archivus for their collection management and member engagement.
+                </p>
+                <div class="flex flex-col gap-4 text-slate-600 dark:text-slate-400">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons text-primary">check_circle</span>
+                        <span>30-day free trial</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons text-primary">check_circle</span>
+                        <span>Dedicated onboarding specialist</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons text-primary">check_circle</span>
+                        <span>Seamless migration from legacy systems</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-slate-800 p-8 lg:p-12 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700">
+                <form action="#" class="space-y-5">
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-medium mb-2 opacity-70">First Name</label>
+                            <input class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-transparent focus:border-primary focus:ring-0 transition-all" placeholder="Jane" type="text"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2 opacity-70">Last Name</label>
+                            <input class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-transparent focus:border-primary focus:ring-0 transition-all" placeholder="Doe" type="text"/>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2 opacity-70">Institution Email</label>
+                        <input class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-transparent focus:border-primary focus:ring-0 transition-all" placeholder="jane@university.edu" type="email"/>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2 opacity-70">Organization Type</label>
+                        <select class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-transparent focus:border-primary focus:ring-0 transition-all">
+                            <option>Academic Library</option>
+                            <option>Public Library</option>
+                            <option>Corporate Archive</option>
+                            <option>Private Collection</option>
+                        </select>
+                    </div>
+                    <button class="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-emerald-900 transition-colors shadow-lg shadow-primary/30" type="submit">
+                        Request My Custom Demo
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="mt-24 pt-12 border-t border-slate-200 dark:border-slate-800 flex flex-col md:row justify-between items-center gap-8 text-slate-500 text-sm">
+            <p>© 2026 Archivus Systems. All rights reserved.</p>
+            <div class="flex gap-8">
+                <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+                <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+                <a class="hover:text-primary transition-colors" href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div class="fixed bottom-8 right-8 z-50">
+    <button class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-primary dark:text-emerald-400" onclick="document.documentElement.classList.toggle('dark')">
+        <span class="material-icons dark:hidden">dark_mode</span>
+        <span class="material-icons hidden dark:block">light_mode</span>
+    </button>
+</div>
+
+</body>
+</html>

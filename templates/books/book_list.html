@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-8 flex justify-between items-center">
+    <h1 class="text-3xl font-bold text-gray-900">Library Catalog</h1>
+    {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+        <a href="{% url 'book_add' %}" class="bg-primary hover:bg-[#142f29] text-white px-4 py-2 rounded shadow transition">
+            + Add New Book
+        </a>
+    {% endif %}
+</div>
+
+<!-- Search Bar -->
+<div class="mb-8">
+    <form method="get" class="flex gap-2">
+        <input type="text" name="q" placeholder="Search by title, author, category..." value="{{ request.GET.q }}"
+               class="flex-grow border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary">
+        <button type="submit" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#142f29] transition">Search</button>
+    </form>
+</div>
+
+<!-- Books Grid -->
+{% if books %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for book in books %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition flex flex-col h-full">
+                <!-- Cover Image -->
+                <div class="h-64 bg-gray-200 overflow-hidden relative">
+                    {% if book.cover_image %}
+                        <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <div class="flex items-center justify-center h-full text-gray-400">
+                            <span class="text-4xl">📚</span>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Status Badge -->
+                    <span class="absolute top-2 right-2 px-2 py-1 text-xs font-bold rounded 
+                        {% if book.status == 'AVAILABLE' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                        {{ book.get_status_display }}
+                    </span>
+                </div>
+
+                <!-- Content -->
+                <div class="p-4 flex flex-col flex-grow">
+                    <h3 class="text-lg font-bold text-gray-900 mb-1 line-clamp-2">{{ book.title }}</h3>
+                    <p class="text-sm text-gray-600 mb-2">{{ book.author.name }}</p>
+                    <div class="flex-grow"></div> <!-- Spacer to push buttons down -->
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <a href="{% url 'book_detail' book.pk %}" class="text-primary hover:text-[#142f29] font-medium text-sm">View Details</a>
+                        {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                            <a href="{% url 'book_edit' book.pk %}" class="text-gray-400 hover:text-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                </svg>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="mt-8 flex justify-center space-x-2">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-4 py-2 border rounded hover:bg-gray-50">Previous</a>
+            {% endif %}
+            <span class="px-4 py-2 text-gray-600">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-4 py-2 border rounded hover:bg-gray-50">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% else %}
+    <div class="text-center py-20 bg-white rounded-lg shadow-sm border">
+        <h3 class="text-xl text-gray-500">No books found matching your search.</h3>
+        <a href="{% url 'book_list' %}" class="text-primary mt-2 inline-block">Clear filters</a>
+    </div>
+{% endif %}
+{% endblock %}
