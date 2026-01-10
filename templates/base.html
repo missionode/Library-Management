@@ -112,16 +112,20 @@
                                 <a href="{% url 'analytics_dashboard' %}" class="text-sm font-medium hover:text-primary transition-colors hidden md:block dark:text-slate-300 dark:hover:text-primary">Dashboard</a>
                             {% endif %}
                             <div class="text-sm text-right hidden lg:block">
-                                <p class="font-bold leading-none">{{ user.username }}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ user.get_role_display }}</p>
+                                <a href="{% url 'profile' %}" class="group block">
+                                    <p class="font-bold leading-none group-hover:text-primary transition-colors">{{ user.username }}</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ user.get_role_display }}</p>
+                                </a>
                             </div>
-                            {% if user.profile_image %}
-                                <img src="{{ user.profile_image.url }}" class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-700">
-                            {% else %}
-                                <div class="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
-                                    {{ user.username|make_list|first|upper }}
-                                </div>
-                            {% endif %}
+                            <a href="{% url 'profile' %}">
+                                {% if user.profile_image %}
+                                    <img src="{{ user.profile_image.url }}" class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-700 hover:border-primary transition-colors object-cover">
+                                {% else %}
+                                    <div class="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold hover:bg-primary/20 transition-colors">
+                                        {{ user.username|make_list|first|upper }}
+                                    </div>
+                                {% endif %}
+                            </a>
                         </div>
                     {% else %}
                         <a href="{% url 'login' %}" class="hover:text-primary transition-colors">Login</a>
