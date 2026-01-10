@@ -12,7 +12,7 @@ class LibrarianRequiredMixin(UserPassesTestMixin):
         return self.request.user.is_authenticated and \
                self.request.user.role in ['LIBRARIAN', 'ADMIN']
 
-class AnalyticsDashboardView(LoginRequiredMixin, LibrarianRequiredMixin, TemplateView):
+class AnalyticsDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'analytics/dashboard.html'
 
     def get_context_data(self, **kwargs):

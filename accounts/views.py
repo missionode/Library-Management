@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView, ListView, View
 from django.db.models import Sum, Q
 from django.contrib import messages
+from django.urls import reverse
 from .forms import MemberRegistrationForm
 from .models import User, MembershipTier
 from circulation.models import BorrowRecord
@@ -12,6 +14,13 @@ class LibrarianRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_authenticated and \
                self.request.user.role in ['LIBRARIAN', 'ADMIN']
+
+class CustomLoginView(LoginView):
+    def get_success_url(self):
+        user = self.request.user
+        if user.role in ['LIBRARIAN', 'ADMIN']:
+            return reverse('analytics_dashboard')
+        return reverse('home')
 
 class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView):
     model = User
