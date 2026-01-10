@@ -34,6 +34,10 @@ This document outlines the architectural roadmap for the Library Management Syst
     *   **Reservations:** Logic to "Hold" a book when all copies are out.
     *   **Return Alert:** Notify Librarian if a returned book is reserved.
 
+### [User Profile Page](./Profile_Page_Update.md) - ✅ COMPLETED
+*   **Goal:** Allow users to manage their personal details and profile picture.
+*   **Features:** Profile View, Image Upload, Navbar Integration.
+
 ### [Phase 7: System Configuration & Notifications](./Phase7_Settings_Notifications.md) - ⏳ PENDING
 *   **Goal:** Make the system dynamic and communicative.
 *   **Features:**

@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import TemplateView, ListView, View
+from django.views.generic import TemplateView, ListView, View, UpdateView
 from django.db.models import Sum, Q
 from django.contrib import messages
-from django.urls import reverse
-from .forms import MemberRegistrationForm
+from django.urls import reverse, reverse_lazy
+from .forms import MemberRegistrationForm, UserProfileForm
 from .models import User, MembershipTier
 from circulation.models import BorrowRecord
 
@@ -64,6 +64,19 @@ class ChangeMembershipView(LoginRequiredMixin, LibrarianRequiredMixin, View):
             member.save()
             messages.success(request, f"Updated {member.username} to {tier.name} tier.")
         return redirect('member_list')
+
+class UserProfileView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserProfileForm
+    template_name = 'accounts/profile.html'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Profile updated successfully!')
+        return super().form_valid(form)
 
 class HomeView(TemplateView):
     template_name = 'home.html'
