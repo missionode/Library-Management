@@ -2,35 +2,35 @@
 
 {% block content %}
 <div class="mb-8 flex justify-between items-center">
-    <h1 class="text-3xl font-bold text-gray-900">Library Analytics</h1>
-    <div class="text-sm text-gray-500">Last updated: {% now "M d, Y H:i" %}</div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Library Analytics</h1>
+    <div class="text-sm text-gray-500 dark:text-slate-400">Last updated: {% now "M d, Y H:i" %}</div>
 </div>
 
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
     
     <!-- Borrowed This Month -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-emerald-100">
-        <p class="text-sm font-medium text-gray-500 uppercase">Borrowed (This Month)</p>
-        <p class="text-3xl font-bold text-primary">{{ borrowed_this_month }}</p>
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700">
+        <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase">Borrowed (This Month)</p>
+        <p class="text-3xl font-bold text-primary dark:text-emerald-400">{{ borrowed_this_month|default:"0" }}</p>
     </div>
 
     <!-- Overdue -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-red-100">
-        <p class="text-sm font-medium text-gray-500 uppercase">Active Overdue</p>
-        <p class="text-3xl font-bold text-red-600">{{ overdue_count }}</p>
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700">
+        <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase">Active Overdue</p>
+        <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ overdue_count|default:"0" }}</p>
     </div>
 
     <!-- Fines Collected -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-green-100">
-        <p class="text-sm font-medium text-gray-500 uppercase">Total Fines Collected</p>
-        <p class="text-3xl font-bold text-green-600">${{ total_fines }}</p>
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700">
+        <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase">Total Fines Collected</p>
+        <p class="text-3xl font-bold text-green-600 dark:text-emerald-400">${{ total_fines|default:"0.00" }}</p>
     </div>
 
     <!-- Lost Books -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <p class="text-sm font-medium text-gray-500 uppercase">Lost Books</p>
-        <p class="text-3xl font-bold text-gray-800">{{ lost_count }}</p>
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700">
+        <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase">Lost Books</p>
+        <p class="text-3xl font-bold text-gray-800 dark:text-white">{{ lost_count|default:"0" }}</p>
     </div>
 
 </div>
@@ -38,43 +38,43 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     
     <!-- Most Popular Books -->
-    <div class="bg-white rounded-xl shadow-sm border">
-        <div class="p-6 border-b">
-            <h2 class="text-lg font-bold text-gray-900">🔥 Most Popular Books</h2>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700">
+        <div class="p-6 border-b dark:border-slate-700">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">🔥 Most Popular Books</h2>
         </div>
         <div class="p-6">
             <ul class="space-y-4">
                 {% for book in popular_books %}
                     <li class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <span class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-xs font-bold mr-3">{{ forloop.counter }}</span>
+                            <span class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-slate-700 rounded-full text-xs font-bold mr-3 dark:text-white">{{ forloop.counter }}</span>
                             <div>
-                                <p class="font-medium text-gray-800">{{ book.title }}</p>
-                                <p class="text-xs text-gray-500">{{ book.author.name }}</p>
+                                <p class="font-medium text-gray-800 dark:text-white">{{ book.title }}</p>
+                                <p class="text-xs text-gray-500 dark:text-slate-400">{{ book.author.name }}</p>
                             </div>
                         </div>
-                        <span class="text-sm font-semibold text-primary bg-emerald-50 px-3 py-1 rounded-full">
+                        <span class="text-sm font-semibold text-primary dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-full">
                             {{ book.borrow_count }} borrows
                         </span>
                     </li>
                 {% empty %}
-                    <li class="text-gray-500 text-center py-4">No borrow data available yet.</li>
+                    <li class="text-gray-500 dark:text-slate-400 text-center py-4">No borrow data available yet.</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 
     <!-- System Quick Reports -->
-    <div class="bg-white rounded-xl shadow-sm border">
-        <div class="p-6 border-b">
-            <h2 class="text-lg font-bold text-gray-900">📄 Quick Reports</h2>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700">
+        <div class="p-6 border-b dark:border-slate-700">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">📄 Quick Reports</h2>
         </div>
         <div class="p-6 space-y-4">
-            <button onclick="window.print()" class="w-full flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition">
+            <button onclick="window.print()" class="w-full flex items-center justify-between p-4 border dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition dark:text-white">
                 <span>Print System Overview</span>
                 <span class="text-gray-400">🖨️</span>
             </button>
-            <p class="text-xs text-gray-500 mt-4 italic">
+            <p class="text-xs text-gray-500 dark:text-slate-400 mt-4 italic">
                 Note: Advanced CSV/PDF export can be integrated using reportlab or pandas in production.
             </p>
         </div>

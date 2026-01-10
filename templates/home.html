@@ -84,7 +84,7 @@
                         {% csrf_token %}
                         <button type="submit" class="hover:text-primary transition-colors">Logout</button>
                     </form>
-                    <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'dashboard' %}">Dashboard</a>
+                    <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'analytics_dashboard' %}">Dashboard</a>
                 {% else %}
                     <a class="hover:text-primary transition-colors" href="{% url 'login' %}">Login</a>
                     <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'register' %}">Register</a>

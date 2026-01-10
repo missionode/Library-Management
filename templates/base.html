@@ -11,7 +11,7 @@
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@300;400;600;700&amp;family=Material+Icons&amp;display=swap" rel="stylesheet"/>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @theme {
             --color-primary: #1A3C34;
@@ -83,9 +83,23 @@
                     
                     {% if user.is_authenticated %}
                         {% if user.role == 'ADMIN' %}
-                            <a href="#" class="hover:text-primary transition-colors">Admin Panel</a>
-                        {% elif user.role == 'LIBRARIAN' %}
-                            <a href="#" class="hover:text-primary transition-colors">Manage Books</a>
+                            <a href="{% url 'admin:index' %}" class="hover:text-primary transition-colors">Django Admin</a>
+                        {% endif %}
+                        
+                        {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                            <div class="relative group">
+                                <button class="hover:text-primary transition-colors flex items-center gap-1 py-2">
+                                    Management <span class="material-icons text-sm">expand_more</span>
+                                </button>
+                                <div class="absolute left-0 top-full pt-2 w-48 hidden group-hover:block">
+                                    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+                                        <a href="{% url 'issue_book' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Issue Book</a>
+                                        <a href="{% url 'return_book' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Return Book</a>
+                                        <a href="{% url 'member_list' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Manage Members</a>
+                                        <a href="{% url 'book_add' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Add Book</a>
+                                    </div>
+                                </div>
+                            </div>
                         {% endif %}
 
                         <form method="post" action="{% url 'logout' %}" class="inline">
@@ -94,6 +108,9 @@
                         </form>
                         
                         <div class="flex items-center gap-3 pl-4 border-l border-slate-300 dark:border-slate-700">
+                            {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                                <a href="{% url 'analytics_dashboard' %}" class="text-sm font-medium hover:text-primary transition-colors hidden md:block dark:text-slate-300 dark:hover:text-primary">Dashboard</a>
+                            {% endif %}
                             <div class="text-sm text-right hidden lg:block">
                                 <p class="font-bold leading-none">{{ user.username }}</p>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ user.get_role_display }}</p>
