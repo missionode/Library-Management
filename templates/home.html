@@ -16,6 +16,17 @@
             --font-sans: "Inter", sans-serif;
             --radius-DEFAULT: 0.75rem;
         }
+        
+        /* Force dark mode to use class strategy */
+        @variant dark (&:where(.dark, .dark *));
+
+        /* Native UI dark mode support */
+        :root {
+            color-scheme: light;
+        }
+        :root.dark {
+            color-scheme: dark;
+        }
     </style>
     
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -37,6 +48,16 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
+    <script>
+        // Inline script to prevent FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.colorScheme = 'light';
+        }
+    </script>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 transition-colors duration-300">
 
@@ -267,11 +288,45 @@
 </footer>
 
 <div class="fixed bottom-8 right-8 z-50">
-    <button class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-primary dark:text-emerald-400" onclick="document.documentElement.classList.toggle('dark')">
-        <span class="material-icons dark:hidden">dark_mode</span>
-        <span class="material-icons hidden dark:block">light_mode</span>
+    <button id="theme-toggle" class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-primary dark:text-emerald-400 hover:scale-110 transition-transform">
+        <span id="theme-icon" class="material-icons">dark_mode</span>
     </button>
 </div>
 
+    <script>
+        // DOM Elements
+        const root = document.documentElement;
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        // Theme Logic
+        function updateThemeUI(isDark) {
+            if (!themeIcon) return;
+            themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+        }
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                root.classList.add('dark');
+                root.style.colorScheme = 'dark';
+                localStorage.theme = 'dark';
+            } else {
+                root.classList.remove('dark');
+                root.style.colorScheme = 'light';
+                localStorage.theme = 'light';
+            }
+            updateThemeUI(isDark);
+        }
+
+        // Initialize UI icon on load
+        updateThemeUI(root.classList.contains('dark'));
+
+        // Event Listeners
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                applyTheme(!root.classList.contains('dark'));
+            });
+        }
+    </script>
 </body>
 </html>
