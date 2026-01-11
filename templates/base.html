@@ -46,7 +46,15 @@
         }
         :is(.dark .glass-nav) {
             background: rgba(15, 23, 42, 0.8);
-            border-bottom: 1px solid rgba(30, 41, 59, 0.8);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+        }
+        
+        /* Global Border Override */
+        .border {
+            border-color: var(--color-slate-200);
+        }
+        :is(.dark .border) {
+            border-color: var(--color-slate-700);
         }
     </style>
     <script>
@@ -86,28 +94,34 @@
                             <a href="{% url 'admin:index' %}" class="hover:text-primary transition-colors">Django Admin</a>
                         {% endif %}
                         
-                        {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
-                            <div class="relative">
-                                <button id="mgmt-menu-btn" class="hover:text-primary transition-colors flex items-center gap-1 py-2 whitespace-nowrap">
-                                    Management <span class="material-icons text-sm">expand_more</span>
-                                </button>
-                                <div id="mgmt-menu-dropdown" class="absolute left-0 top-full pt-2 w-48 hidden z-50">
-                                    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
-                                        <a href="{% url 'issue_book' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Issue Book</a>
-                                        <a href="{% url 'return_book' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Return Book</a>
-                                        <a href="{% url 'member_list' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Manage Members</a>
-                                        <a href="{% url 'book_add' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Add Book</a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-
+                                                {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                                                    <div class="relative">
+                                                        <button id="mgmt-menu-btn" class="hover:text-primary transition-colors flex items-center gap-1 py-2 whitespace-nowrap">
+                                                            Management <span class="material-icons text-sm">expand_more</span>
+                                                        </button>
+                                                        <div id="mgmt-menu-dropdown" class="absolute left-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-200 overflow-hidden hidden z-50">
+                                                            <a href="{% url 'issue_book' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Issue Book</a>
+                                                            <a href="{% url 'return_book' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Return Book</a>
+                                                            <a href="{% url 'member_list' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Manage Users</a>
+                                                            <a href="{% url 'book_add' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Add Book</a>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
                         <form method="post" action="{% url 'logout' %}" class="inline">
                             {% csrf_token %}
                             <button type="submit" class="hover:text-red-500 transition-colors">Logout</button>
                         </form>
                         
-                        <div class="flex items-center gap-3 pl-4 border-l border-slate-300 dark:border-slate-700">
+                        <a href="{% url 'notifications' %}" class="relative hover:text-primary transition-colors ml-4 mr-2">
+                            <span class="material-icons">notifications</span>
+                            {% if unread_notifications_count > 0 %}
+                                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full h-5 w-5 shadow-sm">
+                                    {{ unread_notifications_count }}
+                                </span>
+                            {% endif %}
+                        </a>
+                        
+                        <div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-200">
                             {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
                                 <a href="{% url 'analytics_dashboard' %}" class="text-sm font-medium hover:text-primary transition-colors hidden md:block dark:text-slate-300 dark:hover:text-primary">Dashboard</a>
                             {% endif %}
@@ -119,7 +133,7 @@
                             </div>
                             <a href="{% url 'profile' %}">
                                 {% if user.profile_image %}
-                                    <img src="{{ user.profile_image.url }}" class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-700 hover:border-primary transition-colors object-cover">
+                                    <img src="{{ user.profile_image.url }}" class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-200 hover:border-primary transition-colors object-cover">
                                 {% else %}
                                     <div class="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold hover:bg-primary/20 transition-colors">
                                         {{ user.username|make_list|first|upper }}
@@ -145,7 +159,7 @@
     <div class="h-20"></div>
 
     <!-- Main Content -->
-    <main class="flex-grow container mx-auto px-4 py-8">
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         {% if messages %}
             <div class="mb-6 space-y-2">
                 {% for message in messages %}
@@ -161,7 +175,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-200 dark:border-slate-800 mt-auto bg-white dark:bg-slate-900/50 backdrop-blur-sm">
+    <footer class="border-t border-slate-200 dark:border-slate-200 mt-auto bg-white dark:bg-slate-900/50 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="flex items-center gap-2">
@@ -184,7 +198,7 @@
     <!-- Floating Actions Container -->
     <div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end">
         <!-- Dark Mode Toggle -->
-        <button id="theme-toggle" class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-primary dark:text-emerald-400 hover:scale-110 transition-transform">
+        <button id="theme-toggle" class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-200 flex items-center justify-center text-primary dark:text-emerald-400 hover:scale-110 transition-transform">
             <span id="theme-icon" class="material-icons">dark_mode</span>
         </button>
 
@@ -195,7 +209,7 @@
     </div>
 
     <!-- Chatbot Window -->
-    <div id="chat-container" class="hidden fixed bottom-24 right-8 w-80 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all">
+    <div id="chat-container" class="hidden fixed bottom-24 right-8 w-80 bg-white dark:bg-slate-800 border dark:border-slate-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all">
         <div class="bg-primary text-white p-4 font-bold flex justify-between items-center">
             <span class="flex items-center gap-2">
                 <span class="material-icons text-sm">smart_toy</span> Assistant
@@ -205,11 +219,11 @@
             </button>
         </div>
         <div id="chat-messages" class="h-80 overflow-y-auto p-4 space-y-3 text-sm bg-slate-50 dark:bg-slate-900/50">
-            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] border border-slate-100 dark:border-slate-700">
+            <div class="bg-white dark:bg-slate-800 p-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] border border-slate-200 dark:border-slate-200">
                 Hi! How can I help you today?
             </div>
         </div>
-        <div class="p-3 border-t dark:border-slate-700 bg-white dark:bg-slate-800 flex gap-2">
+        <div class="p-3 border-t dark:border-slate-200 bg-white dark:bg-slate-800 flex gap-2">
             <input type="text" id="chat-input" class="flex-grow bg-slate-100 dark:bg-slate-900 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="Ask me something...">
             <button id="chat-send" class="bg-primary text-white p-2 rounded-lg hover:bg-[#142f29] transition">
                 <span class="material-icons text-sm">send</span>
@@ -305,7 +319,7 @@
                 const data = await response.json();
                 
                 const botDiv = document.createElement('div');
-                botDiv.className = 'bg-white dark:bg-slate-800 p-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] border border-slate-100 dark:border-slate-700';
+                botDiv.className = 'bg-white dark:bg-slate-800 p-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] border border-slate-200 dark:border-slate-200';
                 botDiv.innerText = data.response;
                 chatMessages.appendChild(botDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;

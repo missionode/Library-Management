@@ -10,27 +10,87 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
     
     <!-- Borrowed This Month -->
-    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700">
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-200 flex flex-col h-full">
         <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase">Borrowed (This Month)</p>
-        <p class="text-3xl font-bold text-primary dark:text-emerald-400">{{ borrowed_this_month|default:"0" }}</p>
+        <p class="text-3xl font-bold text-primary dark:text-emerald-400 mb-4">{{ borrowed_this_month|default:"0" }}</p>
+        
+        <div class="flex-grow">
+            <h4 class="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase mb-2">Recent Issues</h4>
+            <ul class="space-y-2 text-sm">
+                {% for record in borrowed_books_list %}
+                    <li class="flex justify-between text-gray-600 dark:text-slate-300">
+                        <span class="truncate pr-2" title="{{ record.book.title }}">{{ record.book.title }}</span>
+                        <span class="text-gray-400 text-xs whitespace-nowrap">{{ record.issued_date|date:"M d" }}</span>
+                    </li>
+                {% empty %}
+                    <li class="text-gray-400 text-xs italic">No activity yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <a href="{% url 'report_builder' %}?report_type=borrow_history" class="mt-4 text-xs font-bold text-primary dark:text-emerald-400 hover:underline">View Detailed Report →</a>
     </div>
 
     <!-- Overdue -->
-    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700">
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-200 flex flex-col h-full">
         <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase">Active Overdue</p>
-        <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ overdue_count|default:"0" }}</p>
+        <p class="text-3xl font-bold text-red-600 dark:text-red-400 mb-4">{{ overdue_count|default:"0" }}</p>
+        
+        <div class="flex-grow">
+            <h4 class="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase mb-2">Critical Overdues</h4>
+            <ul class="space-y-2 text-sm">
+                {% for record in overdue_books_list %}
+                    <li class="flex justify-between text-gray-600 dark:text-slate-300">
+                        <span class="truncate pr-2" title="{{ record.user.username }}">{{ record.user.username }}</span>
+                        <span class="text-red-500 text-xs whitespace-nowrap">{{ record.due_date|timesince }} ago</span>
+                    </li>
+                {% empty %}
+                    <li class="text-gray-400 text-xs italic">No overdue books.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <a href="{% url 'report_builder' %}?report_type=overdue_report" class="mt-4 text-xs font-bold text-primary dark:text-emerald-400 hover:underline">View Detailed Report →</a>
     </div>
 
     <!-- Fines Collected -->
-    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700">
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-200 flex flex-col h-full">
         <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase">Total Fines Collected</p>
-        <p class="text-3xl font-bold text-green-600 dark:text-emerald-400">${{ total_fines|default:"0.00" }}</p>
+        <p class="text-3xl font-bold text-green-600 dark:text-emerald-400 mb-4">₹{{ total_fines|default:"0.00" }}</p>
+        
+        <div class="flex-grow">
+            <h4 class="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase mb-2">Recent Payments</h4>
+            <ul class="space-y-2 text-sm">
+                {% for record in fine_payment_list %}
+                    <li class="flex justify-between text-gray-600 dark:text-slate-300">
+                        <span class="truncate pr-2">{{ record.user.username }}</span>
+                        <span class="text-green-600 dark:text-emerald-400 text-xs font-bold whitespace-nowrap">₹{{ record.fine_amount }}</span>
+                    </li>
+                {% empty %}
+                    <li class="text-gray-400 text-xs italic">No fines collected recently.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <a href="{% url 'report_builder' %}?report_type=fines_report" class="mt-4 text-xs font-bold text-primary dark:text-emerald-400 hover:underline">View Detailed Report →</a>
     </div>
 
     <!-- Lost Books -->
-    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700">
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-200 flex flex-col h-full">
         <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase">Lost Books</p>
-        <p class="text-3xl font-bold text-gray-800 dark:text-white">{{ lost_count|default:"0" }}</p>
+        <p class="text-3xl font-bold text-gray-800 dark:text-white mb-4">{{ lost_count|default:"0" }}</p>
+        
+        <div class="flex-grow">
+            <h4 class="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase mb-2">Recently Lost</h4>
+            <ul class="space-y-2 text-sm">
+                {% for record in lost_books_list %}
+                    <li class="flex justify-between text-gray-600 dark:text-slate-300">
+                        <span class="truncate pr-2" title="{{ record.book.title }}">{{ record.book.title }}</span>
+                        <span class="text-gray-400 text-xs whitespace-nowrap">{{ record.issued_date|date:"M d" }}</span>
+                    </li>
+                {% empty %}
+                    <li class="text-gray-400 text-xs italic">No lost books reported.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <a href="{% url 'report_builder' %}" class="mt-4 text-xs font-bold text-primary dark:text-emerald-400 hover:underline">View Detailed Report →</a>
     </div>
 
 </div>
@@ -38,8 +98,8 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     
     <!-- Most Popular Books -->
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700">
-        <div class="p-6 border-b dark:border-slate-700">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-200">
+        <div class="p-6 border-b dark:border-slate-200">
             <h2 class="text-lg font-bold text-gray-900 dark:text-white">🔥 Most Popular Books</h2>
         </div>
         <div class="p-6">
@@ -65,17 +125,17 @@
     </div>
 
     <!-- System Quick Reports -->
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700">
-        <div class="p-6 border-b dark:border-slate-700">
-            <h2 class="text-lg font-bold text-gray-900 dark:text-white">📄 Quick Reports</h2>
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-200">
+        <div class="p-6 border-b dark:border-slate-200">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">📄 Custom Reports</h2>
         </div>
         <div class="p-6 space-y-4">
-            <button onclick="window.print()" class="w-full flex items-center justify-between p-4 border dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition dark:text-white">
-                <span>Print System Overview</span>
-                <span class="text-gray-400">🖨️</span>
-            </button>
+            <a href="{% url 'report_builder' %}" class="w-full flex items-center justify-between p-4 border dark:border-slate-200 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition dark:text-white group">
+                <span class="font-medium group-hover:text-primary transition-colors">Open Report Builder</span>
+                <span class="text-gray-400 group-hover:text-primary transition-colors">➔</span>
+            </a>
             <p class="text-xs text-gray-500 dark:text-slate-400 mt-4 italic">
-                Note: Advanced CSV/PDF export can be integrated using reportlab or pandas in production.
+                Generate detailed CSV/PDF reports for specific dates and categories.
             </p>
         </div>
     </div>

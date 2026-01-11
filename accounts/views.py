@@ -3,9 +3,11 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView, ListView, View, UpdateView, CreateView
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Value, DecimalField
+from django.db.models.functions import Coalesce
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
+from decimal import Decimal
 from .forms import MemberRegistrationForm, UserProfileForm, LibrarianCreationForm
 from .models import User, MembershipTier
 from circulation.models import BorrowRecord
@@ -31,7 +33,7 @@ class CreateLibrarianView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = User
     form_class = LibrarianCreationForm
     template_name = 'accounts/create_librarian.html'
-    success_url = reverse_lazy('member_list') # Redirect to member list or dashboard
+    success_url = reverse_lazy('member_list')
 
     def form_valid(self, form):
         messages.success(self.request, f"Librarian {form.instance.username} created successfully.")
@@ -44,8 +46,10 @@ class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView)
     paginate_by = 10
 
     def get_queryset(self):
-        # Base queryset: everyone except Admins
-        queryset = User.objects.exclude(role='ADMIN').order_by('username')
+        # Base queryset: exclude Admins, annotate with total fines
+        queryset = User.objects.exclude(role='ADMIN').annotate(
+            total_fines=Coalesce(Sum('borrowed_books__fine_amount'), Value(Decimal('0.00'), output_field=DecimalField()))
+        ).order_by('username')
         
         # Restriction: Librarians can ONLY see Members
         if self.request.user.role == 'LIBRARIAN':
@@ -99,6 +103,22 @@ class ChangeMembershipView(LoginRequiredMixin, LibrarianRequiredMixin, View):
             member.membership_tier = tier
             member.save()
             messages.success(request, f"Updated {member.username} to {tier.name} tier.")
+        return redirect('member_list')
+
+class ClearFinesView(LoginRequiredMixin, LibrarianRequiredMixin, View):
+    def post(self, request, pk):
+        member = get_object_or_404(User, pk=pk)
+        
+        # Calculate amount to be cleared for logging (optional, could add Transaction model later)
+        total_fines = BorrowRecord.objects.filter(user=member).aggregate(Sum('fine_amount'))['fine_amount__sum'] or 0.00
+        
+        if total_fines > 0:
+            # Clear fines
+            BorrowRecord.objects.filter(user=member).update(fine_amount=0.00)
+            messages.success(request, f"Cleared ${total_fines} in fines for {member.username}.")
+        else:
+            messages.info(request, f"{member.username} has no outstanding fines.")
+            
         return redirect('member_list')
 
 class UserProfileView(LoginRequiredMixin, UpdateView):

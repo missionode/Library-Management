@@ -10,6 +10,7 @@ from decimal import Decimal
 from .forms import IssueBookForm
 from .models import BorrowRecord, Reservation
 from books.models import Book
+from core.models import LibraryConfiguration, Notification
 
 User = get_user_model()
 
@@ -27,6 +28,8 @@ class IssueBookView(LoginRequiredMixin, LibrarianRequiredMixin, FormView):
         today = timezone.now().date()
         context['issued_today_count'] = BorrowRecord.objects.filter(issued_date__date=today).count()
         context['recent_issues'] = BorrowRecord.objects.select_related('user', 'book').order_by('-issued_date')[:5]
+        context['members'] = User.objects.filter(role='MEMBER').values('username', 'first_name', 'last_name')
+        context['books'] = Book.objects.all().values('title', 'isbn')
         return context
 
     def form_valid(self, form):
@@ -88,6 +91,12 @@ class IssueBookView(LoginRequiredMixin, LibrarianRequiredMixin, FormView):
             book.available_copies -= 1
             book.save()
         
+        # Send Notification
+        Notification.objects.create(
+            user=user,
+            message=f"You have successfully borrowed '{book.title}'. Due date: {BorrowRecord.objects.filter(user=user, book=book).last().due_date.strftime('%b %d, %Y')}."
+        )
+
         messages.success(self.request, f"Issued '{book.title}' to {user.username}.")
         return super().form_valid(form)
 
@@ -183,7 +192,8 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
             if record.return_date > record.due_date:
                 overdue_days = (record.return_date - record.due_date).days
                 if overdue_days > 0:
-                    record.fine_amount = overdue_days * Decimal('1.00')
+                    config = LibraryConfiguration.load()
+                    record.fine_amount = overdue_days * config.fine_per_day
                     messages.warning(request, f"Fine: ${record.fine_amount}")
             
             record.save()
@@ -194,6 +204,22 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
                 messages.info(request, f"HOLD ALERT: This copy of '{record.book.title}' is reserved for {res.user.username}. Please set it aside.")
                 record.book.status = 'RESERVED'
                 record.book.save()
+                
+                # Notify Reserver
+                Notification.objects.create(
+                    user=res.user,
+                    message=f"Good news! '{record.book.title}' is now available for you to pick up."
+                )
+            else:
+                # Increment Stock
+                record.book.available_copies += 1
+                record.book.save()
+
+            # Notify Borrower
+            Notification.objects.create(
+                user=record.user,
+                message=f"You have returned '{record.book.title}'. Thank you!"
+            )
 
             messages.success(request, f"Returned '{record.book.title}' from {record.user.username}.")
         

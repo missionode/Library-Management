@@ -11,6 +11,7 @@ urlpatterns = [
     path('books/', include('books.urls')),
     path('circulation/', include('circulation.urls')),
     path('analytics/', include('analytics.urls')),
+    path('core/', include('core.urls')),
     path('', account_views.HomeView.as_view(), name='home'),
 ]
 

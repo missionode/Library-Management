@@ -26,6 +26,11 @@
     *   Personal loan status ("When is my book due?").
     *   Recommendations ("Can you recommend a book?").
 
+### 2.5 Custom Report Builder (Enhancement)
+*   **Goal:** Provide flexible, downloadable reports for Librarians.
+*   **Filters:** Date Range, Report Type (Borrowing, Overdue, Fines).
+*   **Output:** Dynamic table view with Print/PDF capability.
+
 ## 3. Deliverables (COMPLETED)
 1.  [x] `analytics` app created.
 2.  [x] Librarian Analytics Dashboard implemented.
@@ -33,6 +38,7 @@
 4.  [x] Review system (Model + Form + Display) implemented.
 5.  [x] AI Chatbot widget and backend intent handler implemented.
 6.  [x] Live Status Summary added to the main User Dashboard.
+7.  [x] Custom Report Builder implemented (`/analytics/reports/`).
 
 ## 4. Verification Checklist
 *   [x] Verify Analytics dashboard displays correct counts.

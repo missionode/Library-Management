@@ -18,6 +18,12 @@
 
 ## 3. Features
 
+### Staff Management (Admin Only) - *Added*
+*   **Create Librarian:** Dedicated workflow for Admins to onboard new Librarians (`/accounts/librarian/create/`).
+*   **Role Visibility:**
+    *   **Admins:** See all users (Members + Librarians).
+    *   **Librarians:** See only Members (restricted view).
+
 ### Librarian User Management
 *   **Member List View:** Searchable table of all users with role 'MEMBER'.
 *   **Member Detail View:** Show profile info, current active loans, fine history, and subscription status.

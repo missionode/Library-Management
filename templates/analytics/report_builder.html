@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Custom Reports</h1>
+        <p class="text-gray-500 dark:text-slate-400">Generate detailed insights based on your specific criteria.</p>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-200 mb-10">
+        <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+            <div class="md:col-span-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Report Type</label>
+                {{ form.report_type }}
+            </div>
+            
+            <div class="md:col-span-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Start Date</label>
+                {{ form.start_date }}
+            </div>
+
+            <div class="md:col-span-1">
+                <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">End Date</label>
+                {{ form.end_date }}
+            </div>
+
+            <div class="md:col-span-1">
+                <button type="submit" class="w-full bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#142f29] transition font-bold shadow-md">
+                    Generate Report
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Report Results -->
+    {% if report_data %}
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-200 flex justify-between items-center bg-gray-50 dark:bg-slate-800/50">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ report_type_label }}</h3>
+                    <p class="text-sm text-gray-500 dark:text-slate-400">
+                        {{ start_date|date:"M d, Y" }} - {{ end_date|date:"M d, Y" }}
+                    </p>
+                </div>
+                {% if total_amount %}
+                    <div class="bg-green-100 dark:bg-emerald-900/30 text-green-800 dark:text-emerald-400 px-4 py-2 rounded-lg font-bold">
+                        Total: ₹{{ total_amount }}
+                    </div>
+                {% endif %}
+                <button onclick="window.print()" class="text-primary hover:text-[#142f29] dark:text-emerald-400 transition flex items-center gap-1">
+                    <span class="material-icons text-sm">print</span> Print
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+                    <thead class="bg-gray-50 dark:bg-slate-800/50">
+                        <tr>
+                            {% for header in headers %}
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                                    {{ header }}
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
+                        {% for record in report_data %}
+                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition">
+                                {% if report_type_label == 'Borrowing History' %}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ record.issued_date|date:"M d, Y" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">{{ record.user.username }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{{ record.book.title }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        <span class="px-2 py-1 rounded-full text-xs font-semibold
+                                            {% if record.status == 'ISSUED' %}bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300
+                                            {% elif record.status == 'RETURNED' %}bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300
+                                            {% else %}bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300{% endif %}">
+                                            {{ record.get_status_display }}
+                                        </span>
+                                    </td>
+                                
+                                {% elif report_type_label == 'Overdue Books' %}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 dark:text-red-400 font-bold">{{ record.due_date|date:"M d, Y" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">{{ record.user.username }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{{ record.book.title }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-400">
+                                        {{ record.due_date|timesince }}
+                                    </td>
+
+                                {% elif report_type_label == 'Fines Collected' %}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ record.return_date|date:"M d, Y" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">{{ record.user.username }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{{ record.book.title }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 dark:text-emerald-400 font-bold">
+                                        ₹{{ record.fine_amount }}
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="{{ headers|length }}" class="px-6 py-10 text-center text-gray-500 dark:text-slate-400">
+                                    No records found for this period.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% elif request.GET %}
+        <div class="bg-white dark:bg-slate-800 p-10 rounded-xl shadow-sm border dark:border-slate-200 text-center text-gray-500 dark:text-slate-400">
+            No data found for the selected criteria.
+        </div>
+    {% else %}
+        <div class="bg-gray-50 dark:bg-slate-800/50 p-10 rounded-xl border border-dashed border-gray-300 dark:border-slate-200 text-center text-gray-500 dark:text-slate-400">
+            Select filters above to generate a report.
+        </div>
+    {% endif %}
+</div>
+
+<!-- Add dark mode styling to form inputs via JS -->
+<script>
+    document.querySelectorAll('select, input[type="date"]').forEach(input => {
+        input.classList.add('bg-white', 'dark:bg-slate-900', 'border-gray-300', 'dark:border-slate-200', 'text-gray-900', 'dark:text-white', 'focus:ring-2', 'focus:ring-primary', 'focus:border-primary');
+    });
+</script>
+{% endblock %}

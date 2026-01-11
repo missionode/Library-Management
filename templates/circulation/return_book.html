@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto">
+<div class="max-w-7xl mx-auto">
     
     <!-- Header -->
     <div class="mb-8">
@@ -10,30 +10,81 @@
     </div>
 
     <!-- Search Section -->
-    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border dark:border-slate-700 mb-10">
+    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border dark:border-slate-200 mb-10">
         <div class="flex items-center mb-6 text-primary dark:text-emerald-400">
             <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path></svg>
             <h2 class="text-xl font-bold text-gray-900 dark:text-white">Find Active Loans</h2>
         </div>
 
-        <form method="get" class="flex flex-col md:flex-row gap-4">
-            <div class="flex-grow">
+        <form method="get" class="flex flex-col md:flex-row gap-4 relative">
+            <div class="flex-grow relative group" id="user-search-container">
                 <label for="username" class="sr-only">Member Username</label>
-                <input type="text" name="username" id="username" list="user_list" 
+                <input type="text" name="username" id="username" 
                        value="{{ search_query }}"
-                       class="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-900 dark:text-white text-lg transition"
-                       placeholder="Enter Username to fetch Borrowed Books..." required>
-                <datalist id="user_list">
+                       class="w-full px-4 py-3 border border-gray-300 dark:border-slate-200 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-900 dark:text-white text-lg transition"
+                       placeholder="Enter Username to fetch Borrowed Books..." required autocomplete="off">
+                
+                <!-- Custom Dropdown -->
+                <div id="user-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden z-50">
                     {% for member in members %}
-                        <option value="{{ member.username }}">
+                        <div class="user-option px-4 py-2 hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer text-gray-900 dark:text-slate-200" 
+                             data-value="{{ member.username }}">
+                            {{ member.username }}
+                        </div>
                     {% endfor %}
-                </datalist>
+                    <div id="no-results" class="px-4 py-2 text-gray-500 dark:text-slate-400 hidden">No members found</div>
+                </div>
             </div>
             <button type="submit" class="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-[#142f29] transition shadow-lg md:w-auto w-full">
                 Fetch Books
             </button>
         </form>
     </div>
+
+    <script>
+        const searchInput = document.getElementById('username');
+        const dropdown = document.getElementById('user-dropdown');
+        const options = document.querySelectorAll('.user-option');
+        const noResults = document.getElementById('no-results');
+
+        // Show dropdown on focus or input
+        searchInput.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            let hasResults = false;
+
+            options.forEach(option => {
+                const text = option.getAttribute('data-value').toLowerCase();
+                if (text.includes(filter)) {
+                    option.classList.remove('hidden');
+                    hasResults = true;
+                } else {
+                    option.classList.add('hidden');
+                }
+            });
+
+            if (filter.length > 0) {
+                dropdown.classList.remove('hidden');
+                noResults.classList.toggle('hidden', hasResults);
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Hide dropdown on click outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Select option
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                searchInput.value = this.getAttribute('data-value');
+                dropdown.classList.add('hidden');
+            });
+        });
+    </script>
 
     <!-- Results Section -->
     {% if search_query %}
@@ -45,7 +96,7 @@
             {% if records %}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for record in records %}
-                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700 flex flex-col justify-between h-full {% if record.is_overdue %}border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-900/10{% endif %} transition hover:shadow-md">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-200 flex flex-col justify-between h-full {% if record.is_overdue %}border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-900/10{% endif %} transition hover:shadow-md">
                             <div>
                                 <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-2" title="{{ record.book.title }}">{{ record.book.title }}</h4>
                                 <p class="text-sm text-gray-600 dark:text-slate-400 mb-4 font-mono">ISBN: {{ record.book.isbn }}</p>
@@ -92,7 +143,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         <!-- Stat Card -->
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700 flex flex-col justify-between">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-200 flex flex-col justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Returned Today</p>
                 <div class="mt-4 flex items-baseline">
@@ -109,8 +160,8 @@
         </div>
 
         <!-- Recent Activity Table -->
-        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50">
+        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-200 bg-gray-50 dark:bg-slate-800/50">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white">Recent Returns</h3>
             </div>
             <div class="overflow-x-auto">

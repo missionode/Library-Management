@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto">
+<div class="max-w-7xl mx-auto">
     
     <!-- Header -->
     <div class="mb-8">
@@ -10,7 +10,7 @@
     </div>
 
     <!-- Issue Form Section -->
-    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border dark:border-slate-700 mb-10">
+    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border dark:border-slate-200 mb-10">
         <div class="flex items-center mb-6 text-primary dark:text-emerald-400">
             <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             <h2 class="text-xl font-bold text-gray-900 dark:text-white">New Transaction</h2>
@@ -27,40 +27,54 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Username Field -->
-                <div>
+                <div class="relative group" id="user-search-container">
                     <label for="id_username" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Member Username</label>
-                    <input type="text" name="username" id="id_username" list="user_list" 
-                           class="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-900 dark:text-white transition {% if form.username.errors %}border-red-500{% endif %}"
-                           placeholder="Start typing username..." required>
+                    <input type="text" name="username" id="id_username" 
+                           class="w-full px-4 py-2 border border-gray-300 dark:border-slate-200 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-900 dark:text-white transition {% if form.username.errors %}border-red-500{% endif %}"
+                           placeholder="Start typing username..." required autocomplete="off">
+                    
+                    <!-- Custom Dropdown -->
+                    <div id="user-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden z-50">
+                        {% for member in members %}
+                            <div class="user-option px-4 py-2 hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer text-gray-900 dark:text-slate-200" 
+                                 data-value="{{ member.username }}">
+                                {{ member.username }}
+                            </div>
+                        {% endfor %}
+                        <div id="user-no-results" class="px-4 py-2 text-gray-500 dark:text-slate-400 hidden">No members found</div>
+                    </div>
+
                     {% if form.username.errors %}
                         <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
                     {% endif %}
-                    <datalist id="user_list">
-                        {% for member in members %}
-                            <option value="{{ member.username }}">{{ member.first_name }} {{ member.last_name }}</option>
-                        {% endfor %}
-                    </datalist>
                 </div>
 
                 <!-- ISBN Field -->
-                <div>
+                <div class="relative group" id="isbn-search-container">
                     <label for="id_book_isbn" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Book ISBN</label>
                     <div class="flex space-x-2">
-                        <input type="text" name="book_isbn" id="id_book_isbn" list="book_list"
-                               class="flex-grow px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-900 dark:text-white transition {% if form.book_isbn.errors %}border-red-500{% endif %}"
-                               placeholder="Scan or type ISBN..." required>
+                        <input type="text" name="book_isbn" id="id_book_isbn"
+                               class="flex-grow px-4 py-2 border border-gray-300 dark:border-slate-200 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-900 dark:text-white transition {% if form.book_isbn.errors %}border-red-500{% endif %}"
+                               placeholder="Scan or type ISBN..." required autocomplete="off">
                         <button type="button" id="start-scan" class="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition" title="Start Camera Scan">
                             📷
                         </button>
                     </div>
+                    
+                    <!-- Custom Dropdown -->
+                    <div id="isbn-dropdown" class="absolute left-0 right-0 top-full mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden z-50">
+                        {% for book in books %}
+                            <div class="isbn-option px-4 py-2 hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer text-gray-900 dark:text-slate-200" 
+                                 data-value="{{ book.isbn }}">
+                                {{ book.title }} ({{ book.isbn }})
+                            </div>
+                        {% endfor %}
+                        <div id="isbn-no-results" class="px-4 py-2 text-gray-500 dark:text-slate-400 hidden">No books found</div>
+                    </div>
+
                     {% if form.book_isbn.errors %}
                         <p class="text-red-500 text-xs mt-1">{{ form.book_isbn.errors.0 }}</p>
                     {% endif %}
-                    <datalist id="book_list">
-                        {% for book in books %}
-                            <option value="{{ book.isbn }}">{{ book.title }}</option>
-                        {% endfor %}
-                    </datalist>
                     
                     <!-- Scanner Viewfinder -->
                     <div id="reader" class="hidden mt-4 w-full border-2 border-primary rounded-lg overflow-hidden"></div>
@@ -79,7 +93,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         <!-- Stat Card -->
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700 flex flex-col justify-between">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-200 flex flex-col justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Issued Today</p>
                 <div class="mt-4 flex items-baseline">
@@ -96,8 +110,8 @@
         </div>
 
         <!-- Recent Activity Table -->
-        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50">
+        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-200 bg-gray-50 dark:bg-slate-800/50">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white">Recent Issues</h3>
             </div>
             <div class="overflow-x-auto">
@@ -137,40 +151,105 @@
 
 </div>
 
-<!-- Barcode Scanner Logic -->
+<!-- Barcode Scanner & Searchable Select Logic -->
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
+    // Searchable Select Logic
+    function setupSearchableSelect(inputId, dropdownId, optionClass, noResultsId) {
+        const input = document.getElementById(inputId);
+        const dropdown = document.getElementById(dropdownId);
+        const options = document.querySelectorAll('.' + optionClass);
+        const noResults = document.getElementById(noResultsId);
+
+        if (!input || !dropdown) return;
+
+        input.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            let hasResults = false;
+
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                const value = option.getAttribute('data-value').toLowerCase();
+                
+                if (text.includes(filter) || value.includes(filter)) {
+                    option.classList.remove('hidden');
+                    hasResults = true;
+                } else {
+                    option.classList.add('hidden');
+                }
+            });
+
+            if (filter.length > 0) {
+                dropdown.classList.remove('hidden');
+                noResults.classList.toggle('hidden', hasResults);
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Hide dropdown on click outside
+        document.addEventListener('click', function(e) {
+            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Select option
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                input.value = this.getAttribute('data-value');
+                dropdown.classList.add('hidden');
+            });
+        });
+        
+        // Show all options on focus if empty
+        input.addEventListener('focus', function() {
+            if (this.value.length === 0) {
+                 options.forEach(o => o.classList.remove('hidden'));
+                 dropdown.classList.remove('hidden');
+                 noResults.classList.add('hidden');
+            }
+        });
+    }
+
+    // Initialize Selects
+    setupSearchableSelect('id_username', 'user-dropdown', 'user-option', 'user-no-results');
+    setupSearchableSelect('id_book_isbn', 'isbn-dropdown', 'isbn-option', 'isbn-no-results');
+
+    // Barcode Scanner Logic
     const startScanBtn = document.getElementById('start-scan');
     const readerDiv = document.getElementById('reader');
     const isbnInput = document.getElementById('id_book_isbn');
     let html5QrcodeScanner = null;
 
-    startScanBtn.addEventListener('click', () => {
-        if (readerDiv.classList.contains('hidden')) {
-            readerDiv.classList.remove('hidden');
-            
-            html5QrcodeScanner = new Html5Qrcode("reader");
-            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-            
-            html5QrcodeScanner.start({ facingMode: "environment" }, config, (decodedText, decodedResult) => {
-                // Success callback
-                isbnInput.value = decodedText;
-                html5QrcodeScanner.stop().then((ignore) => {
-                    readerDiv.classList.add('hidden');
-                }).catch((err) => {
-                    console.log(err);
+    if (startScanBtn) {
+        startScanBtn.addEventListener('click', () => {
+            if (readerDiv.classList.contains('hidden')) {
+                readerDiv.classList.remove('hidden');
+                
+                html5QrcodeScanner = new Html5Qrcode("reader");
+                const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+                
+                html5QrcodeScanner.start({ facingMode: "environment" }, config, (decodedText, decodedResult) => {
+                    // Success callback
+                    isbnInput.value = decodedText;
+                    html5QrcodeScanner.stop().then((ignore) => {
+                        readerDiv.classList.add('hidden');
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }, (errorMessage) => {
+                    // Parse error, ignore usually
                 });
-            }, (errorMessage) => {
-                // Parse error, ignore usually
-            });
-        } else {
-            // Stop scanning if button clicked again
-            if(html5QrcodeScanner) {
-                 html5QrcodeScanner.stop().then(() => {
-                    readerDiv.classList.add('hidden');
-                 });
+            } else {
+                // Stop scanning if button clicked again
+                if(html5QrcodeScanner) {
+                     html5QrcodeScanner.stop().then(() => {
+                        readerDiv.classList.add('hidden');
+                     });
+                }
             }
-        }
-    });
+        });
+    }
 </script>
 {% endblock %}

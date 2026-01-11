@@ -94,10 +94,22 @@ class BookUpdateView(LoginRequiredMixin, LibrarianRequiredMixin, UpdateView):
     template_name = 'books/book_form.html'
     success_url = reverse_lazy('book_list')
 
+from django.contrib import messages
+
 class BookDeleteView(LoginRequiredMixin, LibrarianRequiredMixin, DeleteView):
     model = Book
     template_name = 'books/book_confirm_delete.html'
     success_url = reverse_lazy('book_list')
+
+    def delete(self, request, *args, **kwargs):
+        book = self.get_object()
+        active_loans = BorrowRecord.objects.filter(book=book, status='ISSUED').exists()
+        
+        if active_loans:
+            messages.error(request, f"Cannot delete '{book.title}' because copies are currently issued. Please adjust the total copies instead.")
+            return redirect('book_edit', pk=book.pk)
+            
+        return super().delete(request, *args, **kwargs)
 
 # Librarian Views - Authors
 class AuthorCreateView(LoginRequiredMixin, LibrarianRequiredMixin, CreateView):

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Notifications</h1>
+        <form action="{% url 'mark_all_notifications_read' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="text-sm font-medium text-primary hover:text-[#142f29] dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors">
+                Mark all as read
+            </button>
+        </form>
+    </div>
+
+    <div class="bg-white dark:bg-slate-800 shadow rounded-xl border dark:border-slate-200 overflow-hidden">
+        <ul class="divide-y divide-gray-200 dark:divide-slate-700">
+            {% for notification in notifications %}
+                <li class="p-6 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition {% if not notification.is_read %}bg-blue-50/50 dark:bg-blue-900/10{% endif %}">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 mt-1">
+                                {% if 'overdue' in notification.message|lower %}
+                                    <span class="material-icons text-red-500">warning</span>
+                                {% elif 'reserved' in notification.message|lower %}
+                                    <span class="material-icons text-green-500">check_circle</span>
+                                {% else %}
+                                    <span class="material-icons text-blue-500">info</span>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <p class="text-gray-900 dark:text-white {% if not notification.is_read %}font-semibold{% endif %}">
+                                    {{ notification.message }}
+                                </p>
+                                <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                                    {{ notification.created_at|timesince }} ago
+                                </p>
+                            </div>
+                        </div>
+                        
+                        {% if not notification.is_read %}
+                            <button onclick="markRead({{ notification.id }}, this)" class="text-xs text-gray-400 hover:text-primary transition-colors" title="Mark as read">
+                                <span class="material-icons text-base">visibility_off</span>
+                            </button>
+                        {% endif %}
+                    </div>
+                </li>
+            {% empty %}
+                <li class="p-12 text-center text-gray-500 dark:text-slate-400">
+                    <span class="material-icons text-4xl mb-2 opacity-50">notifications_off</span>
+                    <p>No notifications yet.</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="mt-6 flex justify-center space-x-2">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 border dark:border-slate-200 rounded hover:bg-gray-50 dark:hover:bg-slate-700 dark:text-slate-300">Previous</a>
+            {% endif %}
+            <span class="px-4 py-2 text-gray-600 dark:text-slate-400">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 border dark:border-slate-200 rounded hover:bg-gray-50 dark:hover:bg-slate-700 dark:text-slate-300">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function markRead(id, btn) {
+        fetch(`/core/notifications/${id}/read/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                // Remove bg highlight
+                const item = btn.closest('li');
+                item.classList.remove('bg-blue-50/50', 'dark:bg-blue-900/10');
+                
+                // Remove bold font
+                const text = item.querySelector('p');
+                text.classList.remove('font-semibold');
+                
+                // Hide button
+                btn.remove();
+                
+                // Optional: Update badge count (reload or complex JS)
+            }
+        });
+    }
+</script>
+{% endblock %}

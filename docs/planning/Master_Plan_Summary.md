@@ -38,16 +38,25 @@ This document outlines the architectural roadmap for the Library Management Syst
 *   **Goal:** Allow users to manage their personal details and profile picture.
 *   **Features:** Profile View, Image Upload, Navbar Integration.
 
-### [Phase 7: System Configuration & Notifications](./Phase7_Settings_Notifications.md) - ⏳ PENDING
+### [UI/UX Modernization](./UI_UX_Modernization.md) - ✅ COMPLETED
+*   **Goal:** Establish a modern, accessible design language.
+*   **Features:** Tailwind v4, Dark Mode, Glassmorphism, Responsive Components.
+
+### [Phase 7: System Configuration & Notifications](./Phase7_Settings_Notifications.md) - ✅ COMPLETED
 *   **Goal:** Make the system dynamic and communicative.
 *   **Features:**
     *   **Dynamic Settings:** UI to change Fine Amount, Default Duration etc. without code deployment.
     *   **Fine Management:** Workflow to pay off fines.
     *   **Notifications:** Email/In-App alerts for Due Dates and Reservations.
 
+### Additional Enhancements - ✅ COMPLETED
+*   **Custom Report Builder:** Advanced filtering and reporting for Library Analytics.
+*   **Role-Based Management:** Strict visibility controls for Librarians vs Admins.
+*   **Staff Onboarding:** Admin-exclusive "Create Librarian" workflow.
+
 ---
 
 ## Technical Stack
 *   **Backend:** Python 3.12 / Django 6.0
-*   **Frontend:** Tailwind CSS
+*   **Frontend:** Tailwind CSS v4 (CDN)
 *   **Database:** SQLite (Development)

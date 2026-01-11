@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-lg shadow-md border dark:border-slate-700">
+<div class="max-w-xl mx-auto bg-white dark:bg-slate-800 p-8 rounded-lg shadow-md border dark:border-slate-200">
     <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Add New Category</h2>
 
     <form method="post" class="space-y-6">
@@ -24,7 +24,7 @@
             </div>
         {% endfor %}
 
-        <div class="flex items-center justify-end space-x-4 pt-6 border-t dark:border-slate-700">
+        <div class="flex items-center justify-end space-x-4 pt-6 border-t dark:border-slate-200">
             <a href="{% url 'book_add' %}" class="text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white">Cancel</a>
             <button type="submit" class="bg-primary text-white px-6 py-2 rounded-md hover:bg-[#142f29] transition font-medium">
                 Save Category
@@ -37,7 +37,7 @@
 <script>
     document.querySelectorAll('input, select, textarea').forEach(input => {
         if (input.type !== 'checkbox' && input.type !== 'radio' && input.type !== 'submit') {
-            input.classList.add('w-full', 'px-4', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'focus:ring-2', 'focus:ring-primary', 'focus:border-transparent', 'transition', 'dark:bg-slate-900', 'dark:border-slate-600', 'dark:text-white');
+            input.classList.add('w-full', 'px-4', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'focus:ring-2', 'focus:ring-primary', 'focus:border-transparent', 'transition', 'dark:bg-slate-900', 'dark:border-slate-200', 'dark:text-white');
         }
     });
 </script>
