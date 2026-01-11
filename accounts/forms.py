@@ -14,6 +14,18 @@ class MemberRegistrationForm(UserCreationForm):
             user.save()
         return user
 
+class LibrarianCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'phone_number')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.role = User.Role.LIBRARIAN
+        if commit:
+            user.save()
+        return user
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User

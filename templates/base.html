@@ -87,11 +87,11 @@
                         {% endif %}
                         
                         {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
-                            <div class="relative group">
-                                <button class="hover:text-primary transition-colors flex items-center gap-1 py-2">
+                            <div class="relative">
+                                <button id="mgmt-menu-btn" class="hover:text-primary transition-colors flex items-center gap-1 py-2 whitespace-nowrap">
                                     Management <span class="material-icons text-sm">expand_more</span>
                                 </button>
-                                <div class="absolute left-0 top-full pt-2 w-48 hidden group-hover:block">
+                                <div id="mgmt-menu-dropdown" class="absolute left-0 top-full pt-2 w-48 hidden z-50">
                                     <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
                                         <a href="{% url 'issue_book' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Issue Book</a>
                                         <a href="{% url 'return_book' %}" class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Return Book</a>
@@ -264,6 +264,23 @@
         }
         if (chatClose) {
             chatClose.onclick = () => chatContainer.classList.add('hidden');
+        }
+
+        // Management Menu Logic
+        const mgmtBtn = document.getElementById('mgmt-menu-btn');
+        const mgmtDropdown = document.getElementById('mgmt-menu-dropdown');
+
+        if (mgmtBtn && mgmtDropdown) {
+            mgmtBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mgmtDropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!mgmtBtn.contains(e.target) && !mgmtDropdown.contains(e.target)) {
+                    mgmtDropdown.classList.add('hidden');
+                }
+            });
         }
 
         async function sendMessage() {

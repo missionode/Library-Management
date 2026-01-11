@@ -1,67 +1,140 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md border">
-    <div class="flex items-center mb-6 text-green-700">
-        <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        <h2 class="text-2xl font-bold text-gray-900">Issue Book</h2>
+<div class="max-w-6xl mx-auto">
+    
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Issue Book</h1>
+        <p class="text-gray-500 dark:text-slate-400">Process new book loans for members.</p>
     </div>
 
-    <form method="post" class="space-y-6">
-        {% csrf_token %}
-        
-        {% if form.non_field_errors %}
-            <div class="bg-red-50 text-red-700 p-3 rounded text-sm">
-                {{ form.non_field_errors }}
-            </div>
-        {% endif %}
-
-        <!-- Username Field with Autocomplete -->
-        <div>
-            <label for="id_username" class="block text-sm font-medium text-gray-700 mb-1">Member Username</label>
-            <input type="text" name="username" id="id_username" list="user_list" 
-                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 transition {% if form.username.errors %}border-red-500{% endif %}"
-                   placeholder="Start typing username..." required>
-            {% if form.username.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
-            {% endif %}
-            <datalist id="user_list">
-                {% for member in members %}
-                    <option value="{{ member.username }}">{{ member.first_name }} {{ member.last_name }}</option>
-                {% endfor %}
-            </datalist>
+    <!-- Issue Form Section -->
+    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border dark:border-slate-700 mb-10">
+        <div class="flex items-center mb-6 text-primary dark:text-emerald-400">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">New Transaction</h2>
         </div>
 
-        <!-- ISBN Field with Scanner -->
-        <div>
-            <label for="id_book_isbn" class="block text-sm font-medium text-gray-700 mb-1">Book ISBN</label>
-            <div class="flex space-x-2">
-                <input type="text" name="book_isbn" id="id_book_isbn" list="book_list"
-                       class="flex-grow px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 transition {% if form.book_isbn.errors %}border-red-500{% endif %}"
-                       placeholder="Scan or type ISBN..." required>
-                <button type="button" id="start-scan" class="bg-gray-200 text-gray-700 px-3 py-2 rounded hover:bg-gray-300 transition" title="Start Camera Scan">
-                    📷
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 p-3 rounded text-sm">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Username Field -->
+                <div>
+                    <label for="id_username" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Member Username</label>
+                    <input type="text" name="username" id="id_username" list="user_list" 
+                           class="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-900 dark:text-white transition {% if form.username.errors %}border-red-500{% endif %}"
+                           placeholder="Start typing username..." required>
+                    {% if form.username.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
+                    {% endif %}
+                    <datalist id="user_list">
+                        {% for member in members %}
+                            <option value="{{ member.username }}">{{ member.first_name }} {{ member.last_name }}</option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+                <!-- ISBN Field -->
+                <div>
+                    <label for="id_book_isbn" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Book ISBN</label>
+                    <div class="flex space-x-2">
+                        <input type="text" name="book_isbn" id="id_book_isbn" list="book_list"
+                               class="flex-grow px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary dark:bg-slate-900 dark:text-white transition {% if form.book_isbn.errors %}border-red-500{% endif %}"
+                               placeholder="Scan or type ISBN..." required>
+                        <button type="button" id="start-scan" class="bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 px-3 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition" title="Start Camera Scan">
+                            📷
+                        </button>
+                    </div>
+                    {% if form.book_isbn.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.book_isbn.errors.0 }}</p>
+                    {% endif %}
+                    <datalist id="book_list">
+                        {% for book in books %}
+                            <option value="{{ book.isbn }}">{{ book.title }}</option>
+                        {% endfor %}
+                    </datalist>
+                    
+                    <!-- Scanner Viewfinder -->
+                    <div id="reader" class="hidden mt-4 w-full border-2 border-primary rounded-lg overflow-hidden"></div>
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" class="w-full lg:w-auto lg:px-12 flex justify-center py-3 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-primary hover:bg-[#142f29] focus:outline-none transition">
+                    Confirm Issue
                 </button>
             </div>
-            {% if form.book_isbn.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.book_isbn.errors.0 }}</p>
-            {% endif %}
-            <datalist id="book_list">
-                {% for book in books %}
-                    <option value="{{ book.isbn }}">{{ book.title }}</option>
-                {% endfor %}
-            </datalist>
-            
-            <!-- Scanner Viewfinder (Hidden by default) -->
-            <div id="reader" class="hidden mt-4 w-full border-2 border-green-500 rounded"></div>
+        </form>
+    </div>
+
+    <!-- Insights Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Stat Card -->
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700 flex flex-col justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Issued Today</p>
+                <div class="mt-4 flex items-baseline">
+                    <p class="text-4xl font-extrabold text-gray-900 dark:text-white">{{ issued_today_count }}</p>
+                    <span class="ml-2 text-sm text-gray-500 dark:text-slate-400">books</span>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-1.5">
+                    <div class="bg-primary h-1.5 rounded-full" style="width: 75%"></div>
+                </div>
+                <p class="mt-2 text-xs text-gray-500 dark:text-slate-400">Daily goal progress</p>
+            </div>
         </div>
 
-        <div class="pt-4">
-            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none transition">
-                Issue Book
-            </button>
+        <!-- Recent Activity Table -->
+        <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Recent Issues</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+                    <thead class="bg-gray-50 dark:bg-slate-800/50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Book Title</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Member</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
+                        {% for record in recent_issues %}
+                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                    {{ record.book.title|truncatechars:30 }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">
+                                    {{ record.user.username }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-400">
+                                    {{ record.issued_date|date:"H:i" }}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-slate-400">
+                                    No books issued yet today.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </form>
+    </div>
+
 </div>
 
 <!-- Barcode Scanner Logic -->

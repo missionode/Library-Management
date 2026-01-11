@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import TemplateView, ListView, View, UpdateView
+from django.views.generic import TemplateView, ListView, View, UpdateView, CreateView
 from django.db.models import Sum, Q
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
-from .forms import MemberRegistrationForm, UserProfileForm
+from .forms import MemberRegistrationForm, UserProfileForm, LibrarianCreationForm
 from .models import User, MembershipTier
 from circulation.models import BorrowRecord
 
@@ -15,12 +15,27 @@ class LibrarianRequiredMixin(UserPassesTestMixin):
         return self.request.user.is_authenticated and \
                self.request.user.role in ['LIBRARIAN', 'ADMIN']
 
+class AdminRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and \
+               self.request.user.role == 'ADMIN'
+
 class CustomLoginView(LoginView):
     def get_success_url(self):
         user = self.request.user
         if user.role in ['LIBRARIAN', 'ADMIN']:
             return reverse('analytics_dashboard')
         return reverse('home')
+
+class CreateLibrarianView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
+    model = User
+    form_class = LibrarianCreationForm
+    template_name = 'accounts/create_librarian.html'
+    success_url = reverse_lazy('member_list') # Redirect to member list or dashboard
+
+    def form_valid(self, form):
+        messages.success(self.request, f"Librarian {form.instance.username} created successfully.")
+        return super().form_valid(form)
 
 class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView):
     model = User
@@ -29,7 +44,14 @@ class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView)
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = User.objects.filter(role='MEMBER').order_by('username')
+        # Base queryset: everyone except Admins
+        queryset = User.objects.exclude(role='ADMIN').order_by('username')
+        
+        # Restriction: Librarians can ONLY see Members
+        if self.request.user.role == 'LIBRARIAN':
+            queryset = queryset.filter(role='MEMBER')
+        
+        # Search Filter
         q = self.request.GET.get('q')
         if q:
             queryset = queryset.filter(
@@ -38,6 +60,12 @@ class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView)
                 Q(last_name__icontains=q) |
                 Q(email__icontains=q)
             )
+            
+        # Role Filter
+        role_filter = self.request.GET.get('role')
+        if role_filter in ['MEMBER', 'LIBRARIAN']:
+            queryset = queryset.filter(role=role_filter)
+            
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -47,16 +75,24 @@ class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView)
 
 class ToggleMemberStatusView(LoginRequiredMixin, LibrarianRequiredMixin, View):
     def post(self, request, pk):
-        member = get_object_or_404(User, pk=pk, role='MEMBER')
+        member = get_object_or_404(User, pk=pk)
+        if member.role == 'ADMIN':
+            messages.error(request, "Cannot modify Admin users.")
+            return redirect('member_list')
+            
         member.is_active_member = not member.is_active_member
         member.save()
         status = "Active" if member.is_active_member else "Blocked"
-        messages.success(request, f"Member {member.username} is now {status}.")
+        messages.success(request, f"User {member.username} is now {status}.")
         return redirect('member_list')
 
 class ChangeMembershipView(LoginRequiredMixin, LibrarianRequiredMixin, View):
     def post(self, request, pk):
-        member = get_object_or_404(User, pk=pk, role='MEMBER')
+        member = get_object_or_404(User, pk=pk)
+        if member.role == 'ADMIN':
+             messages.error(request, "Cannot modify Admin users.")
+             return redirect('member_list')
+
         tier_id = request.POST.get('tier_id')
         if tier_id:
             tier = get_object_or_404(MembershipTier, id=tier_id)

@@ -12,4 +12,7 @@ urlpatterns = [
     path('members/', views.MemberManagementView.as_view(), name='member_list'),
     path('members/<int:pk>/toggle/', views.ToggleMemberStatusView.as_view(), name='toggle_member_status'),
     path('members/<int:pk>/change-tier/', views.ChangeMembershipView.as_view(), name='change_membership'),
+    
+    # Admin Librarian Management
+    path('librarian/create/', views.CreateLibrarianView.as_view(), name='create_librarian'),
 ]

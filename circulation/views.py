@@ -6,6 +6,7 @@ from django.views.generic import FormView, ListView, View
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from datetime import timedelta
+from decimal import Decimal
 from .forms import IssueBookForm
 from .models import BorrowRecord, Reservation
 from books.models import Book
@@ -20,6 +21,13 @@ class IssueBookView(LoginRequiredMixin, LibrarianRequiredMixin, FormView):
     template_name = 'circulation/issue_book.html'
     form_class = IssueBookForm
     success_url = reverse_lazy('issue_book')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = timezone.now().date()
+        context['issued_today_count'] = BorrowRecord.objects.filter(issued_date__date=today).count()
+        context['recent_issues'] = BorrowRecord.objects.select_related('user', 'book').order_by('-issued_date')[:5]
+        return context
 
     def form_valid(self, form):
         # Additional validation logic
@@ -131,17 +139,26 @@ class ReserveBookView(LoginRequiredMixin, View):
 class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
     template_name = 'circulation/return_book.html'
 
+    def get_context_data(self):
+        today = timezone.now().date()
+        context = {
+            'returned_today_count': BorrowRecord.objects.filter(return_date__date=today).count(),
+            'recent_returns': BorrowRecord.objects.filter(status='RETURNED').select_related('user', 'book').order_by('-return_date')[:5],
+            'members': User.objects.filter(role='MEMBER').values('username')
+        }
+        return context
+
     def get(self, request):
         search_query = request.GET.get('username', '')
         records = []
         if search_query:
             records = BorrowRecord.objects.filter(user__username__icontains=search_query, status='ISSUED')
         
-        context = {
+        context = self.get_context_data()
+        context.update({
             'records': records,
             'search_query': search_query,
-            'members': User.objects.filter(role='MEMBER').values('username')
-        }
+        })
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -156,7 +173,7 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
         
         if action == 'mark_lost':
             record.status = 'LOST'
-            record.fine_amount = record.book.price + 5.00
+            record.fine_amount = record.book.price + Decimal('5.00')
             record.save()
             messages.error(request, f"'{record.book.title}' marked as LOST.")
         else:
@@ -166,7 +183,7 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
             if record.return_date > record.due_date:
                 overdue_days = (record.return_date - record.due_date).days
                 if overdue_days > 0:
-                    record.fine_amount = overdue_days * 1.00
+                    record.fine_amount = overdue_days * Decimal('1.00')
                     messages.warning(request, f"Fine: ${record.fine_amount}")
             
             record.save()
@@ -176,10 +193,6 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
             if res:
                 messages.info(request, f"HOLD ALERT: This copy of '{record.book.title}' is reserved for {res.user.username}. Please set it aside.")
                 record.book.status = 'RESERVED'
-                record.book.save()
-            else:
-                # Increment Stock
-                record.book.available_copies += 1
                 record.book.save()
 
             messages.success(request, f"Returned '{record.book.title}' from {record.user.username}.")
