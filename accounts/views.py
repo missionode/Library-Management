@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import TemplateView, ListView, View, UpdateView, CreateView
+from django.views.generic import TemplateView, ListView, View, UpdateView, CreateView, DetailView
 from django.db.models import Sum, Q, Value, DecimalField
 from django.db.models.functions import Coalesce
 from django.contrib import messages
@@ -37,6 +37,16 @@ class CreateLibrarianView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
 
     def form_valid(self, form):
         messages.success(self.request, f"Librarian {form.instance.username} created successfully.")
+        return super().form_valid(form)
+
+class CreateMemberView(LoginRequiredMixin, LibrarianRequiredMixin, CreateView):
+    model = User
+    form_class = MemberRegistrationForm
+    template_name = 'accounts/create_member.html'
+    success_url = reverse_lazy('member_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, f"Member {form.instance.username} created successfully.")
         return super().form_valid(form)
 
 class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView):
@@ -75,6 +85,23 @@ class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tiers'] = MembershipTier.objects.filter(is_active=True)
+        return context
+
+class MemberDetailView(LoginRequiredMixin, LibrarianRequiredMixin, DetailView):
+    model = User
+    template_name = 'accounts/member_detail.html'
+    context_object_name = 'member'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        member = self.object
+        
+        # Add Borrow History
+        context['borrow_history'] = BorrowRecord.objects.filter(user=member).order_by('-issued_date')
+        
+        # Add Fines
+        context['total_fines'] = BorrowRecord.objects.filter(user=member).aggregate(Sum('fine_amount'))['fine_amount__sum'] or 0.00
+        
         return context
 
 class ToggleMemberStatusView(LoginRequiredMixin, LibrarianRequiredMixin, View):

@@ -25,11 +25,16 @@
         </div>
 
         <!-- Actions -->
-        {% if user.role == 'ADMIN' %}
-            <a href="{% url 'create_librarian' %}" class="flex items-center justify-center bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#142f29] transition whitespace-nowrap">
-                <span class="mr-2">+</span> Create Librarian
+        <div class="flex gap-2">
+            <a href="{% url 'create_member' %}" class="flex items-center justify-center bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#142f29] transition whitespace-nowrap">
+                <span class="mr-2">+</span> Add Member
             </a>
-        {% endif %}
+            {% if user.role == 'ADMIN' %}
+                <a href="{% url 'create_librarian' %}" class="flex items-center justify-center bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#142f29] transition whitespace-nowrap">
+                    <span class="mr-2">+</span> Create Librarian
+                </a>
+            {% endif %}
+        </div>
     </form>
 </div>
 
@@ -55,7 +60,11 @@
                                     {{ member.username|slice:":1"|upper }}
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-white">{{ member.get_full_name|default:member.username }}</div>
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">
+                                        <a href="{% url 'member_detail' member.pk %}" class="hover:text-primary hover:underline transition-colors">
+                                            {{ member.get_full_name|default:member.username }}
+                                        </a>
+                                    </div>
                                     <div class="text-sm text-gray-500 dark:text-slate-400">{{ member.email }}</div>
                                 </div>
                             </div>

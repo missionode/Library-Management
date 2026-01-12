@@ -12,8 +12,8 @@
         </form>
     </div>
 
-    <div class="bg-white dark:bg-slate-800 shadow rounded-xl border dark:border-slate-200 overflow-hidden">
-        <ul class="divide-y divide-gray-200 dark:divide-slate-700">
+    <div class="bg-white dark:bg-slate-800 shadow rounded-xl border dark:border-slate-600 overflow-hidden">
+        <ul class="divide-y divide-gray-200 dark:divide-slate-600">
             {% for notification in notifications %}
                 <li class="p-6 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition {% if not notification.is_read %}bg-blue-50/50 dark:bg-blue-900/10{% endif %}">
                     <div class="flex items-start justify-between">
@@ -57,11 +57,11 @@
     {% if is_paginated %}
         <div class="mt-6 flex justify-center space-x-2">
             {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 border dark:border-slate-200 rounded hover:bg-gray-50 dark:hover:bg-slate-700 dark:text-slate-300">Previous</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 border dark:border-slate-600 rounded hover:bg-gray-50 dark:hover:bg-slate-700 dark:text-slate-300">Previous</a>
             {% endif %}
             <span class="px-4 py-2 text-gray-600 dark:text-slate-400">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 border dark:border-slate-200 rounded hover:bg-gray-50 dark:hover:bg-slate-700 dark:text-slate-300">Next</a>
+                <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 border dark:border-slate-600 rounded hover:bg-gray-50 dark:hover:bg-slate-700 dark:text-slate-300">Next</a>
             {% endif %}
         </div>
     {% endif %}

@@ -26,7 +26,7 @@
 
 ### Librarian User Management
 *   **Member List View:** Searchable table of all users with role 'MEMBER'.
-*   **Member Detail View:** Show profile info, current active loans, fine history, and subscription status.
+*   **Member Detail View:** Dedicated page (`/accounts/members/<pk>/`) showing profile, borrow history, and fines. Accessible by clicking usernames in the list.
 *   **Actions:**
     *   **Block/Unblock:** Toggle `is_active_member`.
     *   **Change Tier:** Manually upgrade/downgrade a user.
