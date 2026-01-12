@@ -87,10 +87,15 @@ class MemberManagementView(LoginRequiredMixin, LibrarianRequiredMixin, ListView)
         context['tiers'] = MembershipTier.objects.filter(is_active=True)
         return context
 
-class MemberDetailView(LoginRequiredMixin, LibrarianRequiredMixin, DetailView):
+class MemberDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = User
     template_name = 'accounts/member_detail.html'
     context_object_name = 'member'
+
+    def test_func(self):
+        user = self.request.user
+        # Allow if staff OR if viewing own profile
+        return (user.role in ['LIBRARIAN', 'ADMIN']) or (user.pk == self.get_object().pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
