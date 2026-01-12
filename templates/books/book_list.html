@@ -4,7 +4,7 @@
 <div class="mb-8 flex justify-between items-center">
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Library Catalog</h1>
     {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
-        <a href="{% url 'book_add' %}" class="bg-primary hover:bg-[#142f29] text-white px-4 py-2 rounded shadow transition">
+        <a href="{% url 'book_add' %}" class="bg-primary hover:bg-[#142f29] text-white px-4 py-2 rounded shadow transition relative z-20">
             + Add New Book
         </a>
     {% endif %}
@@ -23,7 +23,10 @@
 {% if books %}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {% for book in books %}
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition flex flex-col h-full dark:border dark:border-slate-200">
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-[1.02] transition-all duration-200 flex flex-col h-full border border-slate-200 dark:border-slate-700 relative group">
+                <!-- Full Card Link -->
+                <a href="{% url 'book_detail' book.pk %}" class="absolute inset-0 z-10" aria-label="View {{ book.title }}"></a>
+
                 <!-- Cover Image -->
                 <div class="h-64 bg-gray-200 dark:bg-slate-700 overflow-hidden relative">
                     {% if book.cover_image %}
@@ -35,7 +38,7 @@
                     {% endif %}
                     
                     <!-- Status Badge -->
-                    <span class="absolute top-2 right-2 px-2 py-1 text-xs font-bold rounded 
+                    <span class="absolute top-2 right-2 px-2 py-1 text-xs font-bold rounded z-20 
                         {% if book.status == 'AVAILABLE' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
                         {{ book.get_status_display }}
                     </span>
@@ -43,20 +46,20 @@
 
                 <!-- Content -->
                 <div class="p-4 flex flex-col flex-grow">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">{{ book.title }}</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-2 group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors">{{ book.title }}</h3>
                     <p class="text-sm text-gray-600 dark:text-slate-400 mb-2">{{ book.author.name }}</p>
                     <div class="flex-grow"></div> <!-- Spacer to push buttons down -->
                     
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="{% url 'book_detail' book.pk %}" class="text-primary hover:text-[#142f29] font-medium text-sm">View Details</a>
-                        {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
-                            <a href="{% url 'book_edit' book.pk %}" class="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300">
+                    <!-- Admin Actions (High Z-Index) -->
+                    {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                        <div class="mt-4 flex justify-end relative z-20">
+                            <a href="{% url 'book_edit' book.pk %}" class="text-gray-400 hover:text-primary dark:hover:text-white p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" title="Edit Book">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                 </svg>
                             </a>
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

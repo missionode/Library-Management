@@ -84,7 +84,37 @@
                         {% csrf_token %}
                         <button type="submit" class="hover:text-primary transition-colors">Logout</button>
                     </form>
-                    <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'analytics_dashboard' %}">Dashboard</a>
+                    
+                    {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                        <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'analytics_dashboard' %}">Dashboard</a>
+                    {% endif %}
+
+                    <a href="{% url 'notifications' %}" class="relative hover:text-primary transition-colors ml-4 mr-4">
+                        <span class="material-icons">notifications</span>
+                        {% if unread_notifications_count > 0 %}
+                            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full h-5 w-5 shadow-sm">
+                                {{ unread_notifications_count }}
+                            </span>
+                        {% endif %}
+                    </a>
+                    
+                    <div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-200">
+                        <div class="text-sm text-right hidden lg:block">
+                            <a href="{% url 'member_detail' user.pk %}" class="group block">
+                                <p class="font-bold leading-none group-hover:text-primary transition-colors">{{ user.username }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ user.get_role_display }}</p>
+                            </a>
+                        </div>
+                        <a href="{% url 'member_detail' user.pk %}">
+                            {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}" class="h-10 w-10 rounded-full border border-slate-200 dark:border-slate-200 hover:border-primary transition-colors object-cover">
+                            {% else %}
+                                <div class="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold hover:bg-primary/20 transition-colors">
+                                    {{ user.username|make_list|first|upper }}
+                                </div>
+                            {% endif %}
+                        </a>
+                    </div>
                 {% else %}
                     <a class="hover:text-primary transition-colors" href="{% url 'login' %}">Login</a>
                     <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'register' %}">Register</a>
