@@ -247,8 +247,8 @@
                     &copy; {% now "Y" %} Archivus Systems. All rights reserved.
                 </p>
                 <div class="flex gap-6 text-sm text-slate-500 dark:text-slate-400">
-                    <a href="#" class="hover:text-primary transition-colors">Privacy</a>
-                    <a href="#" class="hover:text-primary transition-colors">Terms</a>
+                    <a href="{% url 'privacy' %}" class="hover:text-primary transition-colors">Privacy</a>
+                    <a href="{% url 'terms' %}" class="hover:text-primary transition-colors">Terms</a>
                 </div>
             </div>
         </div>
@@ -261,12 +261,15 @@
             <span id="theme-icon" class="material-icons">dark_mode</span>
         </button>
 
+        {% if user.is_authenticated %}
         <!-- Chatbot Toggle -->
         <button id="chat-toggle" class="w-14 h-14 rounded-full bg-primary text-white shadow-xl hover:bg-[#142f29] transition-transform hover:scale-105 flex items-center justify-center">
             <span class="material-icons text-2xl">chat</span>
         </button>
+        {% endif %}
     </div>
 
+    {% if user.is_authenticated %}
     <!-- Chatbot Window -->
     <div id="chat-container" class="hidden fixed bottom-24 right-8 w-80 bg-white dark:bg-slate-800 border dark:border-slate-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all">
         <div class="bg-primary text-white p-4 font-bold flex justify-between items-center">
@@ -289,6 +292,7 @@
             </button>
         </div>
     </div>
+    {% endif %}
 
     <script>
         // DOM Elements
@@ -332,10 +336,10 @@
         }
 
         // Chatbot Logic
-        if (chatToggle) {
+        if (chatToggle && chatContainer) {
             chatToggle.onclick = () => chatContainer.classList.toggle('hidden');
         }
-        if (chatClose) {
+        if (chatClose && chatContainer) {
             chatClose.onclick = () => chatContainer.classList.add('hidden');
         }
 
@@ -379,6 +383,7 @@
         });
 
         async function sendMessage() {
+            if (!chatInput) return;
             const msg = chatInput.value.trim();
             if (!msg) return;
 

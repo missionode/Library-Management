@@ -188,26 +188,26 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
             <span class="inline-block py-1 px-3 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-primary dark:text-emerald-400 text-sm font-semibold mb-6 tracking-wide uppercase">
-                Modernizing Knowledge Management
+                Version 1.0 Release
             </span>
             <h1 class="font-display text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-8">
-                The Future of <span class="text-primary italic">Library Management</span>
+                Archivus: The <span class="text-primary italic">Intelligent</span> Library System
             </h1>
             <p class="max-w-2xl mx-auto text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
-                Archivus empowers modern libraries with automated cataloging, real-time analytics, and seamless member engagement. Organize intelligence with precision.
+                A comprehensive solution for modern libraries. Track inventory, manage circulation with fine automation, and engage members through a unified portal.
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 {% if user.is_authenticated %}
                     <a class="w-full sm:w-auto px-8 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:scale-105 transition-transform shadow-xl shadow-primary/20" href="{% url 'book_list' %}">
-                        Explore Collection
+                        Browse Catalog
                     </a>
                 {% else %}
-                    <a class="w-full sm:w-auto px-8 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:scale-105 transition-transform shadow-xl shadow-primary/20" href="{% url 'register' %}">
-                        Get Started Today
+                    <a class="w-full sm:w-auto px-8 py-4 bg-primary text-white text-lg font-semibold rounded-full hover:scale-105 transition-transform shadow-xl shadow-primary/20" href="{% url 'login' %}">
+                        Member Login
                     </a>
                 {% endif %}
                 <a class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-200 text-lg font-semibold rounded-full hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" href="#features">
-                    View Ecosystem
+                    Explore Features
                 </a>
             </div>
         </div>
@@ -221,13 +221,11 @@
                 <div class="p-8 lg:p-12">
                     <div class="grid grid-cols-12 gap-8">
                         <div class="col-span-12 lg:col-span-4 space-y-6">
-                            <div class="h-32 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse"></div>
-                            <div class="h-64 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse"></div>
+                            <img src="{% static 'images/screenshots/book catalog.png' %}" alt="Catalog View" class="h-32 w-full rounded-xl bg-slate-100 dark:bg-slate-800 object-cover object-top shadow-sm border border-slate-200 dark:border-slate-700">
+                            <img src="{% static 'images/screenshots/books detail view.png' %}" alt="Detail View" class="h-64 rounded-xl bg-slate-100 dark:bg-slate-800 object-cover object-top shadow-sm border border-slate-200 dark:border-slate-700">
                         </div>
                         <div class="col-span-12 lg:col-span-8 space-y-6">
-                            <div class="h-[416px] rounded-xl bg-primary/5 border-2 border-dashed border-primary/20 flex items-center justify-center">
-                                <span class="material-icons text-primary/20 text-9xl">dashboard</span>
-                            </div>
+                            <img src="{% static 'images/screenshots/dashboard view .png' %}" alt="Dashboard View" class="h-[416px] w-full rounded-xl bg-primary/5 border border-slate-200 dark:border-slate-700 object-cover object-top shadow-sm">
                         </div>
                     </div>
                 </div>
@@ -239,68 +237,73 @@
 <section class="py-24 bg-slate-50 dark:bg-slate-900/50" id="features">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-20">
-            <h2 class="font-display text-4xl font-bold mb-4 dark:text-white">Intelligent Core Features</h2>
-            <p class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">Sophisticated tools designed for the next generation of academic and public institutions.</p>
+            <h2 class="font-display text-4xl font-bold mb-4 dark:text-white">Core System Modules</h2>
+            <p class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">Built to streamline every aspect of library administration.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
             <div class="p-8 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-200 hover:shadow-xl transition-all group">
                 <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">auto_awesome</span>
+                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">sync_alt</span>
                 </div>
-                <h3 class="text-xl font-bold mb-3 dark:text-white">Automated Cataloging</h3>
+                <h3 class="text-xl font-bold mb-3 dark:text-white">Smart Circulation</h3>
                 <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Utilize metadata extraction and automated ISBN matching to populate your collection in seconds.
+                    Efficient Issue & Return workflows with automated fine calculation, overdue tracking, and one-click renewals.
                 </p>
             </div>
             <div class="p-8 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-200 hover:shadow-xl transition-all group">
                 <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">bar_chart</span>
+                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">inventory_2</span>
                 </div>
-                <h3 class="text-xl font-bold mb-3 dark:text-white">Real-time Analytics</h3>
+                <h3 class="text-xl font-bold mb-3 dark:text-white">Dynamic Inventory</h3>
                 <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Deep insights into borrowing patterns, inventory health, and demographic engagement through visual heatmaps.
+                    Full catalog control. Add books via Camera ISBN Scanner, organize by Category/Author, and track availability in real-time.
                 </p>
             </div>
             <div class="p-8 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-200 hover:shadow-xl transition-all group">
                 <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">account_circle</span>
+                    <span class="material-icons text-primary dark:text-emerald-400 text-3xl">card_membership</span>
                 </div>
-                <h3 class="text-xl font-bold mb-3 dark:text-white">Member Portals</h3>
+                <h3 class="text-xl font-bold mb-3 dark:text-white">Membership Tiers</h3>
                 <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Personalized digital experiences for members to reserve books, track reading progress, and manage renewals.
+                    Flexible user management with custom Membership Tiers. Define borrow limits, durations, and fees for different user groups.
                 </p>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-24" id="testimonials">
+<section class="py-24" id="intelligence">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-primary rounded-[2.5rem] overflow-hidden text-white">
             <div class="grid lg:grid-cols-2">
                 <div class="p-12 lg:p-20 flex flex-col justify-center">
-                    <span class="material-icons text-5xl opacity-30 mb-8 text-emerald-300">format_quote</span>
-                    <blockquote class="text-3xl font-display leading-tight mb-10">
-                        "Archivus transformed our university library from a static storage space into a dynamic knowledge hub. The automated workflows saved us 20+ hours a week."
-                    </blockquote>
+                    <span class="material-icons text-5xl opacity-30 mb-8 text-emerald-300">smart_toy</span>
+                    <h2 class="text-4xl font-display font-bold leading-tight mb-6">
+                        Intelligent AI <span class="text-emerald-300 italic">Assistant</span>
+                    </h2>
+                    <p class="text-xl text-emerald-50/80 mb-10 leading-relaxed">
+                        Archivus features a built-in AI chatbot capable of answering complex queries about the collection, identifying borrowing trends, and assisting librarians with administrative tasks in real-time.
+                    </p>
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-emerald-800 flex items-center justify-center font-bold">ED</div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-800/50 backdrop-blur flex items-center justify-center">
+                            <span class="material-icons text-emerald-300">insights</span>
+                        </div>
                         <div>
-                            <p class="font-bold">Eleanor Davies</p>
-                            <p class="text-emerald-300 text-sm">Head Librarian, St. Mark's Institute</p>
+                            <p class="font-bold">Powered by Advanced Analytics</p>
+                            <p class="text-emerald-300 text-sm">Real-time data synchronization across all modules</p>
                         </div>
                     </div>
                 </div>
                 <div class="relative hidden lg:block">
                     <div class="absolute inset-0 bg-emerald-900/20"></div>
-                    <img alt="Modern Library Interior" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&q=80&w=1000"/>
+                    <img alt="Data visualization" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1722901329609-4efbfabc70ea?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"/>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<footer class="py-24 border-t border-slate-200 dark:border-slate-200" id="demo">
+<footer class="py-24 border-t border-slate-200 dark:border-slate-200" id="contact">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-20 items-center">
             <div>
@@ -309,78 +312,113 @@
                 <!-- Dark mode footer logo -->
                 <img alt="Archivus Full Logo" class="h-12 mb-8 hidden dark:block" src="{% static 'images/logos/logo mark and brand name  light.svg' %}"/>
                 
-                <h2 class="font-display text-4xl font-bold mb-6 dark:text-white leading-tight">Ready to evolve your library system?</h2>
+                <h2 class="font-display text-4xl font-bold mb-6 dark:text-white leading-tight">Empowering Knowledge Centers Everywhere</h2>
                 <p class="text-xl text-slate-600 dark:text-slate-400 mb-10">
-                    Join 200+ institutions worldwide that trust Archivus for their collection management and member engagement.
+                    Archivus is more than just a tracking tool; it's a foundation for intellectual growth and efficient resource management.
                 </p>
                 <div class="flex flex-col gap-4 text-slate-600 dark:text-slate-400">
                     <div class="flex items-center gap-3">
-                        <span class="material-icons text-primary">check_circle</span>
-                        <span>30-day free trial</span>
+                        <span class="material-icons text-primary">location_on</span>
+                        <span>Archivus Systems HQ, Innovation District</span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="material-icons text-primary">check_circle</span>
-                        <span>Dedicated onboarding specialist</span>
+                        <span class="material-icons text-primary">mail</span>
+                        <span>support@archivus-systems.com</span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="material-icons text-primary">check_circle</span>
-                        <span>Seamless migration from legacy systems</span>
+                        <span class="material-icons text-primary">schedule</span>
+                        <span>Librarian Support: Mon-Fri, 9am - 6pm</span>
                     </div>
                 </div>
             </div>
             <div class="bg-white dark:bg-slate-800 p-8 lg:p-12 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-200">
-                <form action="#" class="space-y-5">
-                    <div class="grid md:grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-sm font-medium mb-2 opacity-70">First Name</label>
-                            <input class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-transparent focus:border-primary focus:ring-0 transition-all" placeholder="Jane" type="text"/>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2 opacity-70">Last Name</label>
-                            <input class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-transparent focus:border-primary focus:ring-0 transition-all" placeholder="Doe" type="text"/>
-                        </div>
+                <h3 class="text-2xl font-bold mb-8 dark:text-white">Global Ecosystem Stats</h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl">
+                        <p class="text-sm text-slate-500 uppercase font-bold tracking-wider mb-2">Total Collection</p>
+                        <p class="text-3xl font-extrabold text-primary dark:text-emerald-400">1.2M+</p>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2 opacity-70">Institution Email</label>
-                        <input class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-transparent focus:border-primary focus:ring-0 transition-all" placeholder="jane@university.edu" type="email"/>
+                    <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl">
+                        <p class="text-sm text-slate-500 uppercase font-bold tracking-wider mb-2">Active Members</p>
+                        <p class="text-3xl font-extrabold text-primary dark:text-emerald-400">85K</p>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2 opacity-70">Organization Type</label>
-                        <select class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border-transparent focus:border-primary focus:ring-0 transition-all">
-                            <option>Academic Library</option>
-                            <option>Public Library</option>
-                            <option>Corporate Archive</option>
-                            <option>Private Collection</option>
-                        </select>
+                    <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl">
+                        <p class="text-sm text-slate-500 uppercase font-bold tracking-wider mb-2">Institutions</p>
+                        <p class="text-3xl font-extrabold text-primary dark:text-emerald-400">200+</p>
                     </div>
-                    <button class="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-emerald-900 transition-colors shadow-lg shadow-primary/30" type="submit">
-                        Request My Custom Demo
-                    </button>
-                </form>
+                    <div class="p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl">
+                        <p class="text-sm text-slate-500 uppercase font-bold tracking-wider mb-2">Daily Loans</p>
+                        <p class="text-3xl font-extrabold text-primary dark:text-emerald-400">4.2K</p>
+                    </div>
+                </div>
+                <div class="mt-8 pt-8 border-t border-slate-100 dark:border-slate-700">
+                    <a href="{% url 'register' %}" class="block w-full py-4 bg-primary text-white text-center font-bold rounded-xl hover:bg-emerald-900 transition-colors shadow-lg shadow-primary/30">
+                        Join the Ecosystem Today
+                    </a>
+                </div>
             </div>
         </div>
         <div class="mt-24 pt-12 border-t border-slate-200 dark:border-slate-200 flex flex-col md:row justify-between items-center gap-8 text-slate-500 text-sm">
             <p>© 2026 Archivus Systems. All rights reserved.</p>
             <div class="flex gap-8">
-                <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
-                <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+                <a class="hover:text-primary transition-colors" href="{% url 'privacy' %}">Privacy Policy</a>
+                <a class="hover:text-primary transition-colors" href="{% url 'terms' %}">Terms of Service</a>
                 <a class="hover:text-primary transition-colors" href="#">Cookie Policy</a>
             </div>
         </div>
     </div>
 </footer>
 
-<div class="fixed bottom-8 right-8 z-50">
+<div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end">
+    <!-- Dark Mode Toggle -->
     <button id="theme-toggle" class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-200 flex items-center justify-center text-primary dark:text-emerald-400 hover:scale-110 transition-transform">
         <span id="theme-icon" class="material-icons">dark_mode</span>
     </button>
+
+    {% if user.is_authenticated %}
+    <!-- Chatbot Toggle -->
+    <button id="chat-toggle" class="w-14 h-14 rounded-full bg-primary text-white shadow-xl hover:bg-[#142f29] transition-transform hover:scale-105 flex items-center justify-center">
+        <span class="material-icons text-2xl">chat</span>
+    </button>
+    {% endif %}
 </div>
+
+{% if user.is_authenticated %}
+<!-- Chatbot Window -->
+<div id="chat-container" class="hidden fixed bottom-24 right-8 w-80 bg-white dark:bg-slate-800 border dark:border-slate-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 transition-all">
+    <div class="bg-primary text-white p-4 font-bold flex justify-between items-center">
+        <span class="flex items-center gap-2">
+            <span class="material-icons text-sm">smart_toy</span> Assistant
+        </span>
+        <button id="chat-close" class="text-white hover:text-red-200 transition">
+            <span class="material-icons">close</span>
+        </button>
+    </div>
+    <div id="chat-messages" class="h-80 overflow-y-auto p-4 space-y-3 text-sm bg-slate-50 dark:bg-slate-900/50">
+        <div class="bg-white dark:bg-slate-800 p-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] border border-slate-200 dark:border-slate-200">
+            Hi! How can I help you today?
+        </div>
+    </div>
+    <div class="p-3 border-t dark:border-slate-200 bg-white dark:bg-slate-800 flex gap-2">
+        <input type="text" id="chat-input" class="flex-grow bg-slate-100 dark:bg-slate-900 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="Ask me something...">
+        <button id="chat-send" class="bg-primary text-white p-2 rounded-lg hover:bg-[#142f29] transition">
+            <span class="material-icons text-sm">send</span>
+        </button>
+    </div>
+</div>
+{% endif %}
 
     <script>
         // DOM Elements
         const root = document.documentElement;
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatContainer = document.getElementById('chat-container');
+        const chatClose = document.getElementById('chat-close');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        const chatMessages = document.getElementById('chat-messages');
 
         // Theme Logic
         function updateThemeUI(isDark) {
@@ -409,6 +447,51 @@
             themeToggleBtn.addEventListener('click', () => {
                 applyTheme(!root.classList.contains('dark'));
             });
+        }
+
+        // Chatbot Logic
+        if (chatToggle) {
+            chatToggle.onclick = () => chatContainer.classList.toggle('hidden');
+        }
+        if (chatClose) {
+            chatClose.onclick = () => chatContainer.classList.add('hidden');
+        }
+
+        async function sendMessage() {
+            if (!chatInput) return;
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+
+            // Append User Message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'bg-primary/10 dark:bg-primary/20 p-3 rounded-lg rounded-tr-none max-w-[85%] self-end ml-auto text-right border border-primary/10';
+            userDiv.innerText = msg;
+            chatMessages.appendChild(userDiv);
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Fetch Bot Response
+            try {
+                const response = await fetch('{% url "chatbot_api" %}', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: msg})
+                });
+                const data = await response.json();
+                
+                const botDiv = document.createElement('div');
+                botDiv.className = 'bg-white dark:bg-slate-800 p-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] border border-slate-200 dark:border-slate-200';
+                botDiv.innerText = data.response;
+                chatMessages.appendChild(botDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        if (chatSend) chatSend.onclick = sendMessage;
+        if (chatInput) {
+            chatInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
         }
 
         // Mobile Menu Logic (Click outside to close)
