@@ -145,7 +145,7 @@
                 </div>
                 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden text-primary dark:text-emerald-400 p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <button id="mobile-menu-btn" onclick="event.stopPropagation(); document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden text-primary dark:text-emerald-400 p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                     <span class="material-icons">menu</span>
                 </button>
             </div>
