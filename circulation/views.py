@@ -185,42 +185,75 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
             record.fine_amount = record.book.price + Decimal('5.00')
             record.save()
             messages.error(request, f"'{record.book.title}' marked as LOST.")
-        else:
-            record.return_date = timezone.now()
-            record.status = 'RETURNED'
-            
-            if record.return_date > record.due_date:
-                overdue_days = (record.return_date - record.due_date).days
-                if overdue_days > 0:
-                    config = LibraryConfiguration.load()
-                    record.fine_amount = overdue_days * config.fine_per_day
-                    messages.warning(request, f"Fine: ${record.fine_amount}")
-            
-            record.save()
-            
-            # Reservation Check
-            res = Reservation.objects.filter(book=record.book, status='PENDING').order_by('reserved_date').first()
-            if res:
-                messages.info(request, f"HOLD ALERT: This copy of '{record.book.title}' is reserved for {res.user.username}. Please set it aside.")
-                record.book.status = 'RESERVED'
-                record.book.save()
-                
-                # Notify Reserver
-                Notification.objects.create(
-                    user=res.user,
-                    message=f"Good news! '{record.book.title}' is now available for you to pick up."
-                )
+            return redirect(f"{reverse('return_book')}?username={record.user.username}")
+
+        # Check for Fine logic
+        now = timezone.now()
+        fine_amount = Decimal('0.00')
+        overdue_days = 0
+        
+        if now > record.due_date:
+            overdue_days = (now - record.due_date).days
+            if overdue_days > 0:
+                config = LibraryConfiguration.load()
+                fine_amount = overdue_days * config.fine_per_day
+
+        # 1. Initial Click (Action is 'return') -> Show Confirmation if fine exists
+        if action == 'return':
+            if fine_amount > 0:
+                return render(request, 'circulation/fine_confirmation.html', {
+                    'record': record,
+                    'fine_amount': fine_amount,
+                    'overdue_days': overdue_days
+                })
             else:
-                # Increment Stock
-                record.book.available_copies += 1
-                record.book.save()
+                # No fine, proceed with standard return
+                final_fine = Decimal('0.00')
 
-            # Notify Borrower
+        # 2. Pay Now Clicked
+        elif action == 'return_pay_now':
+            final_fine = Decimal('0.00') # Cleared immediately
+            messages.success(request, f"Returned '{record.book.title}'. Fine of ₹{fine_amount} PAID.")
+
+        # 3. Pay Later Clicked
+        elif action == 'return_pay_later':
+            final_fine = fine_amount # Added to account
+            messages.warning(request, f"Returned '{record.book.title}'. Fine of ₹{final_fine} added to account.")
+        
+        else:
+            return redirect('return_book')
+
+        # Process Return (Common Logic)
+        record.return_date = now
+        record.status = 'RETURNED'
+        record.fine_amount = final_fine
+        record.save()
+        
+        # Reservation Check
+        res = Reservation.objects.filter(book=record.book, status='PENDING').order_by('reserved_date').first()
+        if res:
+            messages.info(request, f"HOLD ALERT: This copy of '{record.book.title}' is reserved for {res.user.username}. Please set it aside.")
+            record.book.status = 'RESERVED'
+            record.book.save()
+            
+            # Notify Reserver
             Notification.objects.create(
-                user=record.user,
-                message=f"You have returned '{record.book.title}'. Thank you!"
+                user=res.user,
+                message=f"Good news! '{record.book.title}' is now available for you to pick up."
             )
+        else:
+            # Increment Stock
+            record.book.available_copies += 1
+            record.book.save()
 
+        # Notify Borrower
+        Notification.objects.create(
+            user=record.user,
+            message=f"You have returned '{record.book.title}'. Thank you!"
+        )
+
+        # Standard success message if no fine was involved (to avoid double messaging)
+        if fine_amount == 0:
             messages.success(request, f"Returned '{record.book.title}' from {record.user.username}.")
         
         return redirect(f"{reverse('return_book')}?username={record.user.username}")
