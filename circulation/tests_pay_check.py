@@ -56,11 +56,11 @@ class PayCheckFeatureTest(TestCase):
         record.due_date = timezone.now() - timedelta(days=2)
         record.save()
 
-        # Create a notification
+        # Create a notification (even if read, it should be deleted)
         notification = Notification.objects.create(
             user=self.member,
             message=f"OVERDUE ALERT: '{self.book.title}' is overdue.",
-            is_read=False
+            is_read=True
         )
 
         # Return the book

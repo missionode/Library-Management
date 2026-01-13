@@ -129,8 +129,7 @@ class RenewBookView(LoginRequiredMixin, View):
         # Fix: Delete overdue notifications so they don't persist
         Notification.objects.filter(
             user=request.user,
-            message__icontains=record.book.title,
-            is_read=False
+            message__icontains=record.book.title
         ).filter(message__icontains='overdue').delete()
         
         messages.success(request, f"'{record.book.title}' renewed successfully. New due date: {record.due_date.strftime('%B %d, %Y')}")
@@ -241,13 +240,11 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
         # Fix: Delete overdue notifications so they don't persist in the list as "Active Alerts"
         Notification.objects.filter(
             user=record.user,
-            message__icontains=record.book.title,
-            is_read=False
+            message__icontains=record.book.title
         ).filter(message__icontains='overdue').delete()
         
         Notification.objects.filter(
-            message__icontains=record.book.title,
-            is_read=False
+            message__icontains=record.book.title
         ).filter(message__icontains=record.user.username).filter(message__icontains='overdue').delete()
         
         # Reservation Check
