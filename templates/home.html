@@ -82,7 +82,9 @@
                     {% endif %}
                     <form method="post" action="{% url 'logout' %}" class="inline">
                         {% csrf_token %}
-                        <button type="submit" class="hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer transition-colors">Logout</button>
+                        <button type="submit" class="hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer transition-colors flex items-center">
+                            <span class="material-icons text-sm mr-1">logout</span> Logout
+                        </button>
                     </form>
                     
                     {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}

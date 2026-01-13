@@ -6,7 +6,9 @@
         <!-- Image Section -->
         <div class="md:w-1/3 bg-gray-100 p-8 flex items-center justify-center">
             {% if book.cover_image %}
-                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="max-h-96 shadow-xl rounded">
+                <div class="w-full max-w-[250px] aspect-[2/3] shadow-xl rounded overflow-hidden">
+                    <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="w-full h-full object-cover">
+                </div>
             {% else %}
                 <div class="w-64 h-80 bg-gray-300 flex items-center justify-center rounded shadow-inner">
                     <span class="text-6xl">📚</span>

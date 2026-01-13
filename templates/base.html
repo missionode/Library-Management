@@ -109,7 +109,9 @@
                                                 {% endif %}
                         <form method="post" action="{% url 'logout' %}" class="inline">
                             {% csrf_token %}
-                            <button type="submit" class="hover:text-red-500 cursor-pointer transition-colors">Logout</button>
+                            <button type="submit" class="hover:text-red-500 cursor-pointer transition-colors flex items-center">
+                                <span class="material-icons text-sm mr-1">logout</span> Logout
+                            </button>
                         </form>
                         
                         <a href="{% url 'notifications' %}" class="relative hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ml-4 mr-4">
