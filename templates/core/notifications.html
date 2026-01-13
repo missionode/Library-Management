@@ -38,7 +38,7 @@
                         </div>
                         
                         {% if not notification.is_read %}
-                            <button onclick="markRead({{ notification.id }}, this)" class="text-xs text-gray-400 hover:text-primary transition-colors" title="Mark as read">
+                            <button onclick="markRead({{ notification.id }}, this)" class="text-xs text-gray-400 hover:text-primary dark:hover:text-emerald-400 transition-colors" title="Mark as read">
                                 <span class="material-icons text-base">visibility_off</span>
                             </button>
                         {% endif %}
