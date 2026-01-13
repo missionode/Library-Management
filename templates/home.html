@@ -120,9 +120,62 @@
                     <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'register' %}">Register</a>
                 {% endif %}
             </div>
-            <button class="md:hidden text-primary">
+            <button id="mobile-menu-btn" onclick="event.stopPropagation(); document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden text-primary">
                 <span class="material-icons">menu</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-t border-slate-200 dark:border-slate-200 shadow-lg transition-all">
+        <div class="px-4 pt-2 pb-6 space-y-2">
+            <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Features</a>
+            <a href="{% url 'book_list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Browse Catalog</a>
+            
+            {% if user.is_authenticated %}
+                {% if user.role == 'MEMBER' %}
+                    <a href="{% url 'my_books' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">My Books</a>
+                {% endif %}
+                
+                {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                    <a href="{% url 'analytics_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
+                {% endif %}
+
+                <div class="border-t border-slate-100 dark:border-slate-800 my-2 pt-2">
+                    <div class="flex items-center px-3 py-2 gap-3">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" class="h-8 w-8 rounded-full object-cover">
+                        {% else %}
+                            <div class="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
+                                {{ user.username|make_list|first|upper }}
+                            </div>
+                        {% endif %}
+                        <div class="flex-grow">
+                            <a href="{% url 'member_detail' user.pk %}" class="text-sm font-bold text-gray-900 dark:text-white block">{{ user.username }}</a>
+                            <span class="text-xs text-gray-500">{{ user.get_role_display }}</span>
+                        </div>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="text-red-500 hover:text-red-700">
+                                <span class="material-icons">logout</span>
+                            </button>
+                        </form>
+                    </div>
+                     <a href="{% url 'notifications' %}" class="flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <span>Notifications</span>
+                         {% if unread_notifications_count > 0 %}
+                            <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                {{ unread_notifications_count }}
+                            </span>
+                        {% endif %}
+                    </a>
+                </div>
+            {% else %}
+                <div class="border-t border-slate-100 dark:border-slate-800 my-2 pt-2 grid grid-cols-2 gap-4 px-3">
+                    <a href="{% url 'login' %}" class="text-center py-2 rounded-lg border border-primary text-primary font-medium hover:bg-primary/5 transition-colors">Login</a>
+                    <a href="{% url 'register' %}" class="text-center py-2 rounded-lg bg-primary text-white font-medium hover:shadow-lg transition-shadow">Register</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </nav>
@@ -357,6 +410,23 @@
                 applyTheme(!root.classList.contains('dark'));
             });
         }
+
+        // Mobile Menu Logic (Click outside to close)
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuBtn && mobileMenu) {
+                document.addEventListener('click', (e) => {
+                    // Check if click is outside menu AND outside button
+                    if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
