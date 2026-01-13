@@ -126,12 +126,12 @@ class RenewBookView(LoginRequiredMixin, View):
         record.save()
         
         # Clear related overdue notifications
-        # Fix: Chain filters to avoid repeated keyword arguments
+        # Fix: Delete overdue notifications so they don't persist
         Notification.objects.filter(
             user=request.user,
             message__icontains=record.book.title,
             is_read=False
-        ).filter(message__icontains='overdue').update(is_read=True)
+        ).filter(message__icontains='overdue').delete()
         
         messages.success(request, f"'{record.book.title}' renewed successfully. New due date: {record.due_date.strftime('%B %d, %Y')}")
         return redirect('my_books')
@@ -238,17 +238,17 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
         record.save()
         
         # Clear related overdue notifications (Member and Staff alerts)
-        # Fix: Chain filters to avoid repeated keyword arguments
+        # Fix: Delete overdue notifications so they don't persist in the list as "Active Alerts"
         Notification.objects.filter(
             user=record.user,
             message__icontains=record.book.title,
             is_read=False
-        ).filter(message__icontains='overdue').update(is_read=True)
+        ).filter(message__icontains='overdue').delete()
         
         Notification.objects.filter(
             message__icontains=record.book.title,
             is_read=False
-        ).filter(message__icontains=record.user.username).filter(message__icontains='overdue').update(is_read=True)
+        ).filter(message__icontains=record.user.username).filter(message__icontains='overdue').delete()
         
         # Reservation Check
         res = Reservation.objects.filter(book=record.book, status='PENDING').order_by('reserved_date').first()

@@ -69,8 +69,8 @@ class PayCheckFeatureTest(TestCase):
             'action': 'return_pay_now'
         })
 
-        notification.refresh_from_db()
-        self.assertTrue(notification.is_read, "Notification should be marked as read after return.")
+        # Verify notification is DELETED
+        self.assertFalse(Notification.objects.filter(pk=notification.pk).exists(), "Notification should be deleted after return.")
 
     def test_return_no_fine(self):
         """Test returning a book on time (no fine)."""
