@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border dark:border-slate-600 overflow-hidden">
+        <div class="p-6 text-center border-b dark:border-slate-700">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                <span class="material-icons text-red-600 dark:text-red-400">warning</span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Fine Applicable</h3>
+            <p class="text-sm text-gray-500 dark:text-slate-400 mt-2">
+                This book is overdue by <span class="font-bold text-gray-900 dark:text-white">{{ overdue_days }} days</span>.
+            </p>
+        </div>
+        
+        <div class="p-6 bg-gray-50 dark:bg-slate-800/50">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm text-gray-600 dark:text-slate-400">Book Title</span>
+                <span class="text-sm font-medium text-gray-900 dark:text-white text-right">{{ record.book.title }}</span>
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-sm text-gray-600 dark:text-slate-400">Member</span>
+                <span class="text-sm font-medium text-gray-900 dark:text-white text-right">{{ record.user.username }}</span>
+            </div>
+            <div class="border-t border-gray-200 dark:border-slate-700 pt-4 flex justify-between items-center">
+                <span class="text-base font-bold text-gray-900 dark:text-white">Total Fine</span>
+                <span class="text-2xl font-bold text-red-600 dark:text-red-400">₹{{ fine_amount }}</span>
+            </div>
+        </div>
+
+        <div class="p-6 flex flex-col gap-3">
+            <form method="post" class="w-full">
+                {% csrf_token %}
+                <input type="hidden" name="record_id" value="{{ record.id }}">
+                <button type="submit" name="action" value="return_pay_now" 
+                    class="w-full justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-green-600 hover:bg-green-700 focus:outline-none transition">
+                    Pay Now & Return
+                </button>
+            </form>
+            
+            <form method="post" class="w-full">
+                {% csrf_token %}
+                <input type="hidden" name="record_id" value="{{ record.id }}">
+                <button type="submit" name="action" value="return_pay_later" 
+                    class="w-full justify-center py-3 px-4 border border-gray-300 dark:border-slate-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 focus:outline-none transition">
+                    Pay Later (Add to Account)
+                </button>
+            </form>
+            
+            <a href="{% url 'return_book' %}" class="mt-2 text-center text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-300">
+                Cancel
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
