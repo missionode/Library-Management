@@ -28,7 +28,7 @@
                 <a href="{% url 'book_detail' book.pk %}" class="absolute inset-0 z-10" aria-label="View {{ book.title }}"></a>
 
                 <!-- Cover Image -->
-                <div class="h-64 bg-gray-200 dark:bg-slate-700 overflow-hidden relative">
+                <div class="aspect-[2/3] bg-gray-200 dark:bg-slate-700 overflow-hidden relative">
                     {% if book.cover_image %}
                         <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="w-full h-full object-cover">
                     {% else %}
