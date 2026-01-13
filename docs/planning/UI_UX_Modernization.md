@@ -21,6 +21,11 @@
 *   **Cards:** Standardized "Stat Cards" and "Book Cards" with consistent padding, shadows, and hover effects.
 *   **Forms:** Modernized input fields with focus rings matching the primary theme color.
 
+### Mobile Responsiveness
+*   **Navigation:** Implemented a responsive Hamburger Menu for mobile devices.
+    *   **Implementation:** Used absolute positioning and robust inline JavaScript events (`onclick`) to ensure reliable toggling of the menu overlay on both the base template and the standalone home page.
+    *   **Behavior:** Menu opens below the fixed navbar and automatically closes when clicking outside the menu area.
+
 ## 3. Deliverables
 1.  Updated `base.html` with robust Theme Toggle and Chatbot widget.
 2.  Refactored all templates to use semantic color variables.

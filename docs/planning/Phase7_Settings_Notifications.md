@@ -38,6 +38,7 @@
     *   Created `Notification` model and context processors for navbar badge.
     *   Implemented `IssueBookView` and `ReturnBookView` triggers.
     *   Added `NotificationListView` and "Mark as Read" functionality.
+    *   **Automated Cleanup:** Implemented logic to automatically delete "Overdue" alerts when a book is returned or renewed, ensuring the notification list remains relevant.
 *   **Fine Management:**
     *   Added "Fines" column to User Management.
     *   Implemented `ClearFinesView` to allow Librarians to settle outstanding dues.

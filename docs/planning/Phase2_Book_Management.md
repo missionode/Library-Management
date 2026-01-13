@@ -31,6 +31,7 @@
 
 #### Librarian / Admin Features
 *   **Add Book:** Dedicated form with helper links to add new Authors and Categories on the fly.
+*   **Camera ISBN Scanner:** Integrated barcode scanner (using `html5-qrcode`) on the "Add Book" form to auto-populate ISBNs via device camera.
 *   **Edit/Delete Book:** Management controls available on Book Detail page.
 *   **Dashboard Integration:** Quick actions added to the Librarian's Home Dashboard.
 

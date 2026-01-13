@@ -34,15 +34,17 @@
 *   **Return Book:**
     *   Input: Book ISBN or User ID.
     *   Action: Update `return_date`. Calculate fines if `return_date` > `due_date`. Increment Book `available_copies`. Update Status to `RETURNED`.
+    *   **Pay Check Feature:** If a fine is applicable, the Librarian is prompted with a confirmation screen offering "Pay Now" (clears fine immediately) or "Pay Later" (records fine to user account) options.
 
 ### Member Actions
 *   **Dashboard View:** See list of currently borrowed books with colored status badges (Green: OK, Red: Overdue).
 *   **Renew Book:** Option to extend `due_date`.
 *   **Reserve Book:** If a book is out of stock, place a reservation.
 
-### Automated Processes (Signals/Cron)
+### Automated Processes (Signals/Cron/Logic)
 *   **Fine Calculation:** Logic to check `due_date` vs current date/return date.
 *   **Overdue Marking:** Daily check to mark records as `OVERDUE`.
+*   **Notification Cleanup:** Automated logic clears "Overdue" notifications from the database when a book is returned or renewed, preventing stale alerts in the user's history.
 
 ## 4. Deliverables
 1.  `circulation` app created.
