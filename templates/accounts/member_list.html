@@ -5,6 +5,21 @@
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white">User Management</h1>
 </div>
 
+<!-- Role Hint -->
+<div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6 text-sm text-blue-800 dark:text-blue-300">
+    <div class="flex gap-2">
+        <span class="material-icons text-sm mt-0.5">info</span>
+        <div>
+            <p class="font-bold mb-1">Privilege Guide:</p>
+            <ul class="list-disc pl-4 space-y-1">
+                <li><strong>Member:</strong> Can borrow books based on subscription tier.</li>
+                <li><strong>Librarian:</strong> Can issue/return books and manage member accounts.</li>
+                <li><strong>Admin:</strong> Full system access including deleting books and managing staff.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <!-- Filters & Actions -->
 <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border dark:border-slate-200 mb-6">
     <form method="get" class="flex flex-col md:flex-row gap-4 justify-between">
@@ -56,9 +71,13 @@
                     <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="flex-shrink-0 h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
-                                    {{ member.username|slice:":1"|upper }}
-                                </div>
+                                {% if member.profile_image %}
+                                    <img src="{{ member.profile_image.url }}" class="flex-shrink-0 h-10 w-10 rounded-full object-cover border border-slate-200 dark:border-slate-600">
+                                {% else %}
+                                    <div class="flex-shrink-0 h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+                                        {{ member.username|slice:":1"|upper }}
+                                    </div>
+                                {% endif %}
                                 <div class="ml-4">
                                     <div class="text-sm font-medium text-gray-900 dark:text-white">
                                         <a href="{% url 'member_detail' member.pk %}" class="hover:text-primary dark:hover:text-emerald-400 hover:underline transition-colors">
