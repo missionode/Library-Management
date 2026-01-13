@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Privacy Policy - Archivus Library System{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 md:p-12">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Privacy Policy</h1>
+        
+        <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300">
+            <p class="mb-6">Last Updated: {% now "F j, Y" %}</p>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">1. Introduction</h2>
+            <p>Welcome to the Archivus Library Management System. We are committed to protecting the privacy and security of our members' personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you use our library services.</p>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">2. Information We Collect</h2>
+            <ul class="list-disc pl-5 space-y-2 mb-6">
+                <li><strong>Personal Identification:</strong> Name, email address, phone number, and mailing address provided during registration.</li>
+                <li><strong>Library Activity:</strong> Records of books borrowed, returned, reserved, and any associated fines or fees.</li>
+                <li><strong>Account Credentials:</strong> Encrypted passwords and authentication tokens used to secure your account.</li>
+            </ul>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">3. How We Use Your Data</h2>
+            <p>We use your information solely for the purpose of managing library operations, including:</p>
+            <ul class="list-disc pl-5 space-y-2 mb-6">
+                <li>Facilitating book loans and returns.</li>
+                <li>Sending notifications regarding due dates, reservations, and overdue items.</li>
+                <li>Analyzing library usage trends to improve our collection (data is anonymized for reports).</li>
+                <li>Managing membership tiers and access privileges.</li>
+            </ul>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">4. Data Protection</h2>
+            <p>We implement industry-standard security measures to protect your data against unauthorized access, alteration, disclosure, or destruction. Your reading history is treated as confidential and is not shared with third parties unless required by law.</p>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">5. Your Rights</h2>
+            <p>As a library member, you have the right to:</p>
+            <ul class="list-disc pl-5 space-y-2 mb-6">
+                <li>Access and review your personal information via your Profile page.</li>
+                <li>Update your contact details to ensure you receive important notifications.</li>
+                <li>Request an export of your borrowing history.</li>
+                <li>Request account deletion (subject to returning all borrowed items and clearing outstanding fines).</li>
+            </ul>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">6. Contact Us</h2>
+            <p>If you have any questions about this Privacy Policy, please contact the Library Administration at <a href="mailto:privacy@archivus-systems.com" class="text-primary hover:underline">privacy@archivus-systems.com</a>.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

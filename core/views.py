@@ -1,8 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, TemplateView
 from django.http import JsonResponse
 from .models import Notification
+
+class PrivacyView(TemplateView):
+    template_name = 'legal/privacy.html'
+
+class TermsView(TemplateView):
+    template_name = 'legal/terms.html'
 
 class NotificationListView(LoginRequiredMixin, ListView):
     model = Notification

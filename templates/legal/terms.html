@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms of Service - Archivus Library System{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 md:p-12">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Terms of Service</h1>
+        
+        <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300">
+            <p class="mb-6">Last Updated: {% now "F j, Y" %}</p>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">1. Acceptance of Terms</h2>
+            <p>By registering as a member of the Archivus Library System, you agree to abide by these Terms of Service and all applicable library policies. Failure to comply may result in the suspension or termination of your borrowing privileges.</p>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">2. Membership Responsibilities</h2>
+            <ul class="list-disc pl-5 space-y-2 mb-6">
+                <li><strong>Account Security:</strong> You are responsible for maintaining the confidentiality of your account credentials. Do not share your login details.</li>
+                <li><strong>Contact Information:</strong> You must keep your email and phone number current to receive overdue notices. Failure to receive a notice does not exempt you from fines.</li>
+                <li><strong>Card Usage:</strong> Membership privileges are non-transferable. You may not borrow books on behalf of others using your account.</li>
+            </ul>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">3. Borrowing & Returns</h2>
+            <p>Members may borrow items up to the limit defined by their Membership Tier. All items must be returned by the due date specified at checkout.</p>
+            <ul class="list-disc pl-5 space-y-2 mb-6">
+                <li><strong>Condition:</strong> Items must be returned in the same condition as borrowed. Users will be charged the full replacement cost for lost or damaged items.</li>
+                <li><strong>Fines:</strong> Late returns will incur a daily fine as set by the Library Configuration. Borrowing privileges are suspended if outstanding fines exceed the allowable threshold.</li>
+                <li><strong>Renewals:</strong> Items may be renewed if they have not been reserved by another member.</li>
+            </ul>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">4. Code of Conduct</h2>
+            <p>Users must use the digital platform and physical library resources respectfully. Any attempt to hack, disrupt, or manipulate the Archivus system will result in immediate permanent banning and potential legal action.</p>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">5. Termination</h2>
+            <p>The Library Administration reserves the right to terminate any membership at its discretion for violation of these terms. Upon termination, all borrowed items must be returned immediately.</p>
+
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">6. Changes to Terms</h2>
+            <p>We may update these terms from time to time. Continued use of the library services constitutes acceptance of any changes.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
