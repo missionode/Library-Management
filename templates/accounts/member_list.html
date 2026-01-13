@@ -7,15 +7,28 @@
 
 <!-- Role Hint -->
 <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6 text-sm text-blue-800 dark:text-blue-300">
-    <div class="flex gap-2">
-        <span class="material-icons text-sm mt-0.5">info</span>
-        <div>
-            <p class="font-bold mb-1">Privilege Guide:</p>
-            <ul class="list-disc pl-4 space-y-1">
-                <li><strong>Member:</strong> Can borrow books based on subscription tier.</li>
-                <li><strong>Librarian:</strong> Can issue/return books and manage member accounts.</li>
-                <li><strong>Admin:</strong> Full system access including deleting books and managing staff.</li>
-            </ul>
+    <div class="flex gap-3">
+        <span class="material-icons text-lg mt-0.5">info</span>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            <div>
+                <p class="font-bold mb-2">Privilege Guide:</p>
+                <ul class="list-disc pl-4 space-y-1">
+                    <li><strong>Member:</strong> Can borrow books. Access is restricted by their <b>Subscription Tier</b>.</li>
+                    <li><strong>Librarian:</strong> Can issue/return books, manage members, and clear fines.</li>
+                    <li><strong>Admin:</strong> Full control over the system, including book deletion and staff creation.</li>
+                </ul>
+            </div>
+            <div>
+                <p class="font-bold mb-2">Subscription Details:</p>
+                <p class="mb-2 opacity-90">Tiers define the <b>Borrow Limit</b> (max books) and <b>Duration</b>. You can update a member's tier directly using the dropdown in the table below.</p>
+                <div class="flex flex-wrap gap-2 mt-1">
+                    {% for tier in tiers %}
+                        <span class="bg-blue-100 dark:bg-blue-800/50 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
+                            {{ tier.name }}: {{ tier.max_books }} Books
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </div>
