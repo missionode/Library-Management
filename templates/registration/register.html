@@ -40,7 +40,7 @@
 
 <!-- Tailwind Form Styling Injection -->
 <script>
-    document.querySelectorAll('input').forEach(input => {
+    document.querySelectorAll('input, textarea, select').forEach(input => {
         if (input.type !== 'checkbox' && input.type !== 'radio' && input.type !== 'submit') {
             input.classList.add('mt-1', 'block', 'w-full', 'px-3', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'shadow-sm', 'focus:outline-none', 'focus:ring-primary', 'focus:border-primary', 'sm:text-sm', 'dark:bg-slate-900', 'dark:border-slate-200', 'dark:text-white');
         }
