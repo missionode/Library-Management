@@ -145,7 +145,7 @@
                 </div>
                 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden text-primary dark:text-emerald-400 p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <button id="mobile-menu-btn" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden text-primary dark:text-emerald-400 p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                     <span class="material-icons">menu</span>
                 </button>
             </div>
@@ -363,14 +363,10 @@
 
             if (mobileMenuBtn && mobileMenu) {
                 console.log('Mobile menu initialized');
-                mobileMenuBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent bubbling issues
-                    mobileMenu.classList.toggle('hidden');
-                    console.log('Mobile menu toggled. Hidden:', mobileMenu.classList.contains('hidden'));
-                });
                 
                 // Close menu when clicking outside
                 document.addEventListener('click', (e) => {
+                    // Check if click is outside menu AND outside button
                     if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
                         if (!mobileMenu.classList.contains('hidden')) {
                             mobileMenu.classList.add('hidden');
