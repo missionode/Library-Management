@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <div class="text-sm font-medium text-gray-900 dark:text-white">
-                                        <a href="{% url 'member_detail' member.pk %}" class="hover:text-primary hover:underline transition-colors">
+                                        <a href="{% url 'member_detail' member.pk %}" class="hover:text-primary dark:hover:text-emerald-400 hover:underline transition-colors">
                                             {{ member.get_full_name|default:member.username }}
                                         </a>
                                     </div>
