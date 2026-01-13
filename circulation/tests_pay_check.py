@@ -6,7 +6,7 @@ from datetime import timedelta
 from decimal import Decimal
 from circulation.models import BorrowRecord
 from books.models import Book, Author
-from core.models import LibraryConfiguration
+from core.models import LibraryConfiguration, Notification
 
 User = get_user_model()
 
@@ -43,6 +43,34 @@ class PayCheckFeatureTest(TestCase):
 
         # 4. Setup Config (Fine = 5.00 per day)
         self.config = LibraryConfiguration.objects.create(fine_per_day=Decimal('5.00'))
+
+    def test_return_clears_notifications(self):
+        """Test that returning a book clears related overdue notifications."""
+        record = BorrowRecord.objects.create(
+            user=self.member,
+            book=self.book,
+            status='ISSUED'
+        )
+        # Force overdue
+        record.issued_date = timezone.now() - timedelta(days=20)
+        record.due_date = timezone.now() - timedelta(days=2)
+        record.save()
+
+        # Create a notification
+        notification = Notification.objects.create(
+            user=self.member,
+            message=f"OVERDUE ALERT: '{self.book.title}' is overdue.",
+            is_read=False
+        )
+
+        # Return the book
+        self.client.post(reverse('return_book'), {
+            'record_id': record.id,
+            'action': 'return_pay_now'
+        })
+
+        notification.refresh_from_db()
+        self.assertTrue(notification.is_read, "Notification should be marked as read after return.")
 
     def test_return_no_fine(self):
         """Test returning a book on time (no fine)."""

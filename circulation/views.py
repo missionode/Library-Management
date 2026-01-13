@@ -125,6 +125,14 @@ class RenewBookView(LoginRequiredMixin, View):
         record.renewal_count += 1
         record.save()
         
+        # Clear related overdue notifications
+        # Fix: Chain filters to avoid repeated keyword arguments
+        Notification.objects.filter(
+            user=request.user,
+            message__icontains=record.book.title,
+            is_read=False
+        ).filter(message__icontains='overdue').update(is_read=True)
+        
         messages.success(request, f"'{record.book.title}' renewed successfully. New due date: {record.due_date.strftime('%B %d, %Y')}")
         return redirect('my_books')
 
@@ -228,6 +236,19 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
         record.status = 'RETURNED'
         record.fine_amount = final_fine
         record.save()
+        
+        # Clear related overdue notifications (Member and Staff alerts)
+        # Fix: Chain filters to avoid repeated keyword arguments
+        Notification.objects.filter(
+            user=record.user,
+            message__icontains=record.book.title,
+            is_read=False
+        ).filter(message__icontains='overdue').update(is_read=True)
+        
+        Notification.objects.filter(
+            message__icontains=record.book.title,
+            is_read=False
+        ).filter(message__icontains=record.user.username).filter(message__icontains='overdue').update(is_read=True)
         
         # Reservation Check
         res = Reservation.objects.filter(book=record.book, status='PENDING').order_by('reserved_date').first()
