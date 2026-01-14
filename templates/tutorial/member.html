@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Member Guide - Archivus{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 md:p-12">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Member User Guide</h1>
+        <p class="text-lg text-slate-600 dark:text-slate-400 mb-10">Welcome to Archivus! This guide will help you navigate your borrowing experience.</p>
+
+        <div class="space-y-12">
+            <!-- Browsing -->
+            <section>
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center font-bold">1</span>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Finding Books</h2>
+                </div>
+                <div class="pl-11 prose dark:prose-invert text-slate-600 dark:text-slate-300">
+                    <p>Navigate to the <strong>Browse Catalog</strong> page to view our collection. You can search by Title, Author, or Category. Click on any book card to see detailed information, including availability and location.</p>
+                </div>
+            </section>
+
+            <!-- Borrowing -->
+            <section>
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center font-bold">2</span>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Borrowing & Reservations</h2>
+                </div>
+                <div class="pl-11 prose dark:prose-invert text-slate-600 dark:text-slate-300">
+                    <p>To borrow a book, simply visit the library counter with the book. Our librarians will issue it to your account.</p>
+                    <p>If a book is marked <strong>Out of Stock</strong>, you can click the yellow <strong>Reserve Book</strong> button on its detail page. You will be notified when it becomes available.</p>
+                </div>
+            </section>
+
+            <!-- Managing Loans -->
+            <section>
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 flex items-center justify-center font-bold">3</span>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">My Books & Renewals</h2>
+                </div>
+                <div class="pl-11 prose dark:prose-invert text-slate-600 dark:text-slate-300">
+                    <p>Go to <strong>My Books</strong> to see your current loans and due dates. If you need more time, click the <strong>Renew</strong> button next to an item. Note that renewals are only possible if the book hasn't been reserved by another member.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Getting Started - Archivus{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">Getting Started with Archivus</h1>
+    <p class="text-xl text-slate-600 dark:text-slate-400 mb-12">Join our modern library ecosystem today.</p>
+
+    <div class="grid md:grid-cols-2 gap-8 text-left">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border dark:border-slate-700">
+            <h2 class="text-2xl font-bold text-primary dark:text-emerald-400 mb-4">For Members</h2>
+            <ul class="space-y-3 text-slate-600 dark:text-slate-300">
+                <li>• Browse thousands of books online.</li>
+                <li>• Reserve items from home.</li>
+                <li>• Track your reading history.</li>
+            </ul>
+            <a href="{% url 'register' %}" class="inline-block mt-6 px-6 py-2 bg-primary text-white rounded-lg hover:bg-emerald-900 transition">Register Now</a>
+        </div>
+        
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border dark:border-slate-700">
+            <h2 class="text-2xl font-bold text-primary dark:text-emerald-400 mb-4">For Staff</h2>
+            <p class="text-slate-600 dark:text-slate-300 mb-4">Librarians and Admins have access to powerful tools for circulation and inventory management.</p>
+            <p class="text-sm text-slate-500 italic">Please contact the administrator for staff access.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
