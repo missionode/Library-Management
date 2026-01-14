@@ -325,6 +325,12 @@
                 if(html5QrcodeScanner) {
                      html5QrcodeScanner.stop().then(() => {
                         readerDiv.classList.add('hidden');
+                     });
+                }
+            }
+        });
+    }
+
     // Member Selection Function
     function selectMember(username) {
         const input = document.getElementById('id_username');
