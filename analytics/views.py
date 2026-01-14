@@ -54,6 +54,13 @@ class ReportBuilderView(LoginRequiredMixin, LibrarianRequiredMixin, FormView):
                     ).select_related('user', 'book').order_by('-return_date')
                     context['headers'] = ['Return Date', 'Member', 'Book', 'Fine Amount']
                     context['total_amount'] = context['report_data'].aggregate(Sum('fine_amount'))['fine_amount__sum']
+                    
+                elif report_type == 'lost_books_report':
+                    context['report_data'] = BorrowRecord.objects.filter(
+                        status='LOST',
+                        issued_date__date__range=[start_date, end_date]
+                    ).select_related('user', 'book').order_by('-issued_date')
+                    context['headers'] = ['Issued Date', 'Member', 'Book', 'Fine/Cost']
 
         return context
 

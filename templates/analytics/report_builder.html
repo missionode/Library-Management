@@ -96,6 +96,14 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 dark:text-emerald-400 font-bold">
                                         ₹{{ record.fine_amount }}
                                     </td>
+
+                                {% elif report_type_label == 'Lost Books' %}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ record.issued_date|date:"M d, Y" }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-300">{{ record.user.username }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{{ record.book.title }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 dark:text-red-400 font-bold">
+                                        {% if record.fine_amount > 0 %}₹{{ record.fine_amount }}{% else %}-{% endif %}
+                                    </td>
                                 {% endif %}
                             </tr>
                         {% empty %}
