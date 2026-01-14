@@ -28,7 +28,7 @@ class IssueBookView(LoginRequiredMixin, LibrarianRequiredMixin, FormView):
         today = timezone.now().date()
         context['issued_today_count'] = BorrowRecord.objects.filter(issued_date__date=today).count()
         context['recent_issues'] = BorrowRecord.objects.select_related('user', 'book').order_by('-issued_date')[:5]
-        context['members'] = User.objects.filter(role='MEMBER').values('username', 'first_name', 'last_name')
+        context['members'] = User.objects.all().values('username', 'first_name', 'last_name', 'email', 'role', 'membership_tier__name')
         context['books'] = Book.objects.all().values('title', 'isbn')
         return context
 
