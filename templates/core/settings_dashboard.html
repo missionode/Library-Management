@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">System Settings</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- General Configuration -->
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700 hover:shadow-md transition">
+            <div class="flex items-center mb-4">
+                <span class="material-icons text-3xl text-primary dark:text-emerald-400 mr-3">settings</span>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">General Configuration</h2>
+            </div>
+            <p class="text-gray-600 dark:text-slate-400 mb-6">
+                Manage global settings such as daily fine rates and reservation hold durations.
+            </p>
+            <a href="{% url 'settings_config_edit' %}" class="block w-full text-center py-2 bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-white rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition">
+                Edit Configuration
+            </a>
+        </div>
+
+        <!-- Membership Tiers -->
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border dark:border-slate-700 hover:shadow-md transition">
+            <div class="flex items-center mb-4">
+                <span class="material-icons text-3xl text-primary dark:text-emerald-400 mr-3">card_membership</span>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Membership Tiers</h2>
+            </div>
+            <p class="text-gray-600 dark:text-slate-400 mb-6">
+                Configure subscription levels, borrowing limits, and duration policies.
+            </p>
+            <a href="{% url 'settings_tier_list' %}" class="block w-full text-center py-2 bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-white rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition">
+                Manage Tiers
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

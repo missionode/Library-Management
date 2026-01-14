@@ -84,7 +84,7 @@
                 {% endif %}
 
                 <!-- Borrow/Reserve Buttons -->
-                {% if user.role == 'MEMBER' %}
+                {% if user.is_authenticated %}
                     {% if book.status == 'AVAILABLE' %}
                         <div class="bg-green-100 text-green-800 px-8 py-3 rounded-lg font-bold text-center">
                             Available at Library
