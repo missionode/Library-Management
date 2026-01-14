@@ -73,12 +73,12 @@
                 </a>
             </div>
             <div class="hidden md:flex items-center space-x-8 font-medium">
-                <a class="hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline transition-colors" href="#features">Features</a>
-                <a class="hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline transition-colors" href="{% url 'book_list' %}">Browse Catalog</a>
+                <a class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" href="#features">Features</a>
+                <a class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" href="{% url 'book_list' %}">Browse Catalog</a>
                 
                 {% if user.is_authenticated %}
                     {% if user.role == 'MEMBER' %}
-                        <a class="hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline transition-colors" href="{% url 'my_books' %}">My Books</a>
+                        <a class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" href="{% url 'my_books' %}">My Books</a>
                     {% endif %}
                     <form method="post" action="{% url 'logout' %}" class="inline">
                         {% csrf_token %}
@@ -91,7 +91,7 @@
                         <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'analytics_dashboard' %}">Dashboard</a>
                     {% endif %}
 
-                    <a href="{% url 'notifications' %}" class="relative hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline transition-colors ml-4 mr-4">
+                    <a href="{% url 'notifications' %}" class="relative hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ml-4 mr-4">
                         <span class="material-icons">notifications</span>
                         {% if unread_notifications_count > 0 %}
                             <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full h-5 w-5 shadow-sm">
@@ -118,7 +118,7 @@
                         </a>
                     </div>
                 {% else %}
-                    <a class="hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline transition-colors" href="{% url 'login' %}">Login</a>
+                    <a class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors" href="{% url 'login' %}">Login</a>
                     <a class="px-5 py-2.5 bg-primary text-white rounded-full hover:shadow-lg hover:shadow-primary/20 transition-all" href="{% url 'register' %}">Register</a>
                 {% endif %}
             </div>
@@ -153,7 +153,7 @@
                             </div>
                         {% endif %}
                         <div class="flex-grow">
-                            <a href="{% url 'member_detail' user.pk %}" class="text-sm font-bold text-gray-900 dark:text-white block hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline transition-colors">{{ user.username }}</a>
+                            <a href="{% url 'member_detail' user.pk %}" class="text-sm font-bold text-gray-900 dark:text-white block hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">{{ user.username }}</a>
                             <span class="text-xs text-gray-500">{{ user.get_role_display }}</span>
                         </div>
                         <form method="post" action="{% url 'logout' %}">
