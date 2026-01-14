@@ -293,4 +293,16 @@ class MemberBorrowListView(LoginRequiredMixin, ListView):
     context_object_name = 'borrow_records'
 
     def get_queryset(self):
-        return BorrowRecord.objects.filter(user=self.request.user).order_by('-issued_date')
+        queryset = BorrowRecord.objects.filter(user=self.request.user).order_by('-issued_date')
+        filter_status = self.request.GET.get('filter')
+        
+        if filter_status == 'active':
+            queryset = queryset.filter(status='ISSUED')
+        elif filter_status == 'returned':
+            queryset = queryset.filter(status='RETURNED')
+        elif filter_status == 'lost':
+            queryset = queryset.filter(status='LOST')
+        elif filter_status == 'overdue':
+            queryset = queryset.filter(status='ISSUED', due_date__lt=timezone.now())
+            
+        return queryset
