@@ -6,6 +6,7 @@ class ReportFilterForm(forms.Form):
         ('borrow_history', 'Borrowing History'),
         ('overdue_report', 'Overdue Books'),
         ('fines_report', 'Fines Collected'),
+        ('lost_books_report', 'Lost Books'),
     ]
     
     start_date = forms.DateField(
