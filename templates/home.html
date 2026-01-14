@@ -137,9 +137,13 @@
                     <a href="{% url 'my_books' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">My Books</a>
                 {% endif %}
                 
-                    {% if user.role == 'ADMIN' %}
-                        <a href="{% url 'settings_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Settings</a>
-                    {% endif %}
+                {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                    <a href="{% url 'analytics_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
+                {% endif %}
+                
+                {% if user.role == 'ADMIN' %}
+                    <a href="{% url 'settings_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Settings</a>
+                {% endif %}
 
                 <div class="border-t border-slate-100 dark:border-slate-800 my-2 pt-2">
                     <div class="flex items-center px-3 py-2 gap-3">
