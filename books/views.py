@@ -21,7 +21,10 @@ class BookListView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q')
+        status_filter = self.request.GET.get('status')
+        
         queryset = Book.objects.all().order_by('-publication_date')
+        
         if query:
             queryset = queryset.filter(
                 Q(title__icontains=query) |
@@ -29,6 +32,13 @@ class BookListView(ListView):
                 Q(category__name__icontains=query) |
                 Q(isbn__icontains=query)
             )
+            
+        if status_filter:
+            if status_filter == 'available':
+                queryset = queryset.filter(status='AVAILABLE')
+            elif status_filter == 'borrowed':
+                queryset = queryset.filter(status__in=['OUT_OF_STOCK', 'RESERVED'])
+                
         return queryset
 
 from django.shortcuts import render, redirect
