@@ -84,13 +84,13 @@
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8 font-medium">
+                    {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                        <a href="{% url 'analytics_dashboard' %}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Dashboard</a>
+                    {% endif %}
+                    
                     <a href="{% url 'book_list' %}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Browse Catalog</a>
                     {% if user.is_authenticated %}
                         <a href="{% url 'my_books' %}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">My Books</a>
-                    {% endif %}
-
-                    {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
-                        <a href="{% url 'analytics_dashboard' %}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Dashboard</a>
                     {% endif %}
                     
                     {% if user.is_authenticated %}
@@ -160,14 +160,14 @@
         <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-t border-slate-200 dark:border-slate-800 shadow-lg transition-all">
             <div class="px-4 pt-2 pb-6 space-y-2">
+                {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                    <a href="{% url 'analytics_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
+                {% endif %}
+
                 <a href="{% url 'book_list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Browse Catalog</a>
                 
                 {% if user.is_authenticated %}
                     <a href="{% url 'my_books' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">My Books</a>
-
-                    {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
-                        <a href="{% url 'analytics_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
-                    {% endif %}
 
                     {% if user.role == 'ADMIN' %}
                         <a href="{% url 'settings_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Settings</a>
