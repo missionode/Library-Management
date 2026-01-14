@@ -131,16 +131,16 @@
     <!-- Mobile Menu (Hidden by default) -->
     <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-t border-slate-200 dark:border-slate-200 shadow-lg transition-all">
         <div class="px-4 pt-2 pb-6 space-y-2">
-            <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Features</a>
-            <a href="{% url 'book_list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Browse Catalog</a>
+            <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Features</a>
+            <a href="{% url 'book_list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Browse Catalog</a>
             
             {% if user.is_authenticated %}
                 {% if user.role == 'MEMBER' %}
-                    <a href="{% url 'my_books' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">My Books</a>
+                    <a href="{% url 'my_books' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">My Books</a>
                 {% endif %}
                 
                 {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
-                    <a href="{% url 'analytics_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
+                    <a href="{% url 'analytics_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
                 {% endif %}
 
                 <div class="border-t border-slate-100 dark:border-slate-800 my-2 pt-2">
@@ -163,7 +163,7 @@
                             </button>
                         </form>
                     </div>
-                     <a href="{% url 'notifications' %}" class="flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                     <a href="{% url 'notifications' %}" class="flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                         <span>Notifications</span>
                          {% if unread_notifications_count > 0 %}
                             <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
