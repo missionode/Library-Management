@@ -15,6 +15,16 @@
     <form method="get" class="flex gap-2">
         <input type="text" name="q" placeholder="Search by title, author, category..." value="{{ request.GET.q }}"
                class="flex-grow border border-gray-300 dark:border-slate-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary dark:bg-slate-900 dark:text-white">
+        
+        <select name="status" class="border border-gray-300 dark:border-slate-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary dark:bg-slate-900 dark:text-white">
+            <option value="">All Status</option>
+            <option value="available" {% if request.GET.status == 'available' %}selected{% endif %}>Available Now</option>
+            <option value="borrowed" {% if request.GET.status == 'borrowed' %}selected{% endif %}>Borrowed / Out of Stock</option>
+            {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                <option value="lost" {% if request.GET.status == 'lost' %}selected{% endif %}>Lost Books</option>
+            {% endif %}
+        </select>
+        
         <button type="submit" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#142f29] transition">Search</button>
     </form>
 </div>
@@ -39,7 +49,9 @@
                     
                     <!-- Status Badge -->
                     <span class="absolute top-2 right-2 px-2 py-1 text-xs font-bold rounded z-20 
-                        {% if book.status == 'AVAILABLE' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                        {% if book.status == 'AVAILABLE' %}bg-green-100 text-green-800
+                        {% elif book.status == 'RESERVED' %}bg-orange-100 text-orange-800
+                        {% else %}bg-red-100 text-red-800{% endif %}">
                         {{ book.get_status_display }}
                     </span>
                 </div>

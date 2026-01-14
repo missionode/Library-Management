@@ -191,6 +191,11 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
             record.status = 'LOST'
             record.fine_amount = record.book.price + Decimal('5.00')
             record.save()
+            
+            # Update book status to LOST
+            record.book.status = 'LOST'
+            record.book.save()
+            
             messages.error(request, f"'{record.book.title}' marked as LOST.")
             return redirect(f"{reverse('return_book')}?username={record.user.username}")
 

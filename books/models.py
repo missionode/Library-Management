@@ -24,6 +24,7 @@ class Book(models.Model):
         ('AVAILABLE', 'Available'),
         ('OUT_OF_STOCK', 'Out of Stock'),
         ('RESERVED', 'Reserved'),
+        ('LOST', 'Lost'),
     ]
 
     title = models.CharField(max_length=200)
@@ -42,7 +43,7 @@ class Book(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if self.status != 'RESERVED':
+        if self.status not in ['RESERVED', 'LOST']:
             if self.available_copies == 0:
                 self.status = 'OUT_OF_STOCK'
             else:
