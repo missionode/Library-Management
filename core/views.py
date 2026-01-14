@@ -17,6 +17,18 @@ class PrivacyView(TemplateView):
 class TermsView(TemplateView):
     template_name = 'legal/terms.html'
 
+class TutorialView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return render(request, 'tutorial/general.html')
+        
+        if request.user.role == 'ADMIN':
+            return render(request, 'tutorial/admin.html')
+        elif request.user.role == 'LIBRARIAN':
+            return render(request, 'tutorial/librarian.html')
+        else:
+            return render(request, 'tutorial/member.html')
+
 # --- Settings Views ---
 
 class SettingsDashboardView(LoginRequiredMixin, AdminRequiredMixin, TemplateView):

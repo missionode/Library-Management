@@ -7,6 +7,7 @@ urlpatterns = [
     path('notifications/read-all/', views.MarkAllNotificationsReadView.as_view(), name='mark_all_notifications_read'),
     path('privacy/', views.PrivacyView.as_view(), name='privacy'),
     path('terms/', views.TermsView.as_view(), name='terms'),
+    path('tutorial/', views.TutorialView.as_view(), name='tutorial'),
     path('settings/', views.SettingsDashboardView.as_view(), name='settings_dashboard'),
     path('settings/config/', views.LibraryConfigurationUpdateView.as_view(), name='settings_config_edit'),
     path('settings/tiers/', views.MembershipTierListView.as_view(), name='settings_tier_list'),
