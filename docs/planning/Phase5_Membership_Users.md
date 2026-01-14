@@ -9,6 +9,7 @@
 *   `name`: CharField (e.g., "Basic", "Premium", "Student")
 *   `max_books`: IntegerField (Limit on concurrent borrows)
 *   `borrow_duration_days`: IntegerField (Overrides book default if set, or acts as a multiplier)
+*   `max_renewals`: IntegerField (Limits how many times a single loan can be extended)
 *   `subscription_fee`: DecimalField
 *   `is_active`: BooleanField
 
@@ -36,6 +37,7 @@
 *   **Enforcement:** Update `IssueBookForm` to check:
     *   Is user active?
     *   `active_loans_count` < `user.membership_tier.max_books`?
+*   **Renewals:** Check `current_renewals` < `user.membership_tier.max_renewals` before allowing extension.
 *   **Registration:** Update Registration form to select a Tier (or default to Free).
 
 ## 4. Deliverables

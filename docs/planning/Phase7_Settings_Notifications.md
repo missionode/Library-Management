@@ -34,6 +34,9 @@
 *   **Library Configuration:**
     *   Implemented `LibraryConfiguration` singleton model in `core` app.
     *   Admin interface enabled for managing global settings like `fine_per_day`.
+*   **Settings Dashboard:**
+    *   Replaced default Django Admin link with a custom "Settings" dashboard for Admins.
+    *   Allows configuration of Global Settings and **Membership Tiers** (Max Books, Duration, Renewals).
 *   **Notification System:**
     *   Created `Notification` model and context processors for navbar badge.
     *   Implemented `IssueBookView` and `ReturnBookView` triggers.
