@@ -128,8 +128,8 @@
                 <tbody class="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
                     {% for member in members %}
                         <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition cursor-pointer member-row" 
+                            onclick="selectMember('{{ member.username }}')"
                             data-username="{{ member.username }}"
-                            data-role="{{ member.role }}"
                             data-filter-text="{{ member.first_name }} {{ member.last_name }} {{ member.username }} {{ member.email }}">
                             <td class="px-6 py-3 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900 dark:text-white">{{ member.first_name }} {{ member.last_name }}</div>
@@ -325,33 +325,28 @@
                 if(html5QrcodeScanner) {
                      html5QrcodeScanner.stop().then(() => {
                         readerDiv.classList.add('hidden');
+    // Member Selection Function
+    function selectMember(username) {
+        const input = document.getElementById('id_username');
+        if (input) {
+            input.value = username;
+            input.focus();
+            
+            // Hide dropdown
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+            
+            // Visual feedback
+            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            console.log('Selected member:', username);
+        }
+    }
+
     // Member List Row Click & Filter Logic
     const memberRows = document.querySelectorAll('.member-row');
     const memberListSearch = document.getElementById('member-list-search');
     const memberRoleFilter = document.getElementById('member-role-filter');
     const memberSearchNoResults = document.getElementById('member-search-no-results');
-    const issueUsernameInput = document.getElementById('id_username'); // Target the form input
-
-    // Row Click Selection
-    memberRows.forEach(row => {
-        row.addEventListener('click', () => {
-            const username = row.getAttribute('data-username');
-            if(issueUsernameInput) {
-                issueUsernameInput.value = username;
-                issueUsernameInput.focus();
-                
-                // Hide dropdown if it's open (reusing existing logic var 'dropdown' from above might be out of scope?)
-                // Actually 'dropdown' is defined in the block above 'user-dropdown'.
-                // If we are appending to the SAME script block, variables are shared.
-                // Let's assume this code is appended to the end of the existing script block.
-                const userDropdown = document.getElementById('user-dropdown');
-                if(userDropdown) userDropdown.classList.add('hidden');
-
-                // Scroll to top
-                issueUsernameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        });
-    });
 
     // Real-time List Filtering Function
     function filterMembers() {
