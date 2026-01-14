@@ -22,8 +22,13 @@ class BookListView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         status_filter = self.request.GET.get('status')
+        user = self.request.user
         
         queryset = Book.objects.all().order_by('-publication_date')
+        
+        # Hide LOST books from non-staff
+        if not (user.is_authenticated and user.role in ['LIBRARIAN', 'ADMIN']):
+            queryset = queryset.exclude(status='LOST')
         
         if query:
             queryset = queryset.filter(
@@ -38,6 +43,8 @@ class BookListView(ListView):
                 queryset = queryset.filter(status='AVAILABLE')
             elif status_filter == 'borrowed':
                 queryset = queryset.filter(status__in=['OUT_OF_STOCK', 'RESERVED'])
+            elif status_filter == 'lost' and user.is_authenticated and user.role in ['LIBRARIAN', 'ADMIN']:
+                queryset = queryset.filter(status='LOST')
                 
         return queryset
 
