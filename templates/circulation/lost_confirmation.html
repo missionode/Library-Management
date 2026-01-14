@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border dark:border-slate-600 overflow-hidden">
+        <div class="p-6 text-center border-b dark:border-slate-700">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                <span class="material-icons text-red-600 dark:text-red-400">report_problem</span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Mark Book as Lost</h3>
+            <p class="text-sm text-gray-500 dark:text-slate-400 mt-2">
+                This action will mark the book as lost and assess a replacement fee.
+            </p>
+        </div>
+        
+        <form method="post" class="w-full">
+            {% csrf_token %}
+            <input type="hidden" name="record_id" value="{{ record.id }}">
+            
+            <div class="p-6 bg-gray-50 dark:bg-slate-800/50">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-gray-600 dark:text-slate-400">Book Title</span>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white text-right">{{ record.book.title }}</span>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm text-gray-600 dark:text-slate-400">Member</span>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white text-right">{{ record.user.username }}</span>
+                </div>
+                
+                <div class="border-t border-gray-200 dark:border-slate-700 pt-4">
+                    <label for="fine_amount" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Replacement Fee (Fine)</label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 sm:text-sm">₹</span>
+                        </div>
+                        <input type="number" step="0.01" name="fine_amount" id="fine_amount" value="{{ book_price }}"
+                               class="focus:ring-red-500 focus:border-red-500 block w-full pl-7 pr-12 sm:text-sm border border-gray-300 rounded-md py-2 dark:bg-slate-900 dark:border-slate-600 dark:text-white" placeholder="0.00">
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 flex flex-col gap-3">
+                <button type="submit" name="action" value="confirm_lost_pay_now" 
+                    class="w-full justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-green-600 hover:bg-green-700 focus:outline-none transition">
+                    Confirm Lost & Pay Now
+                </button>
+                
+                <button type="submit" name="action" value="confirm_lost_pay_later" 
+                    class="w-full justify-center py-3 px-4 border border-gray-300 dark:border-slate-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 focus:outline-none transition">
+                    Confirm Lost & Pay Later
+                </button>
+                
+                <a href="{% url 'return_book' %}" class="mt-2 text-center text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-300">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

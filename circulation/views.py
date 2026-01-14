@@ -187,18 +187,48 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
 
         record = get_object_or_404(BorrowRecord, id=record_id, status='ISSUED')
         
+        # --- Mark as Lost Workflow ---
         if action == 'mark_lost':
+            return render(request, 'circulation/lost_confirmation.html', {
+                'record': record,
+                'book_price': record.book.price
+            })
+
+        elif action == 'confirm_lost_pay_now':
+            fine_val = request.POST.get('fine_amount', '0.00')
+            try:
+                fine = Decimal(fine_val)
+            except:
+                fine = Decimal('0.00')
+            
             record.status = 'LOST'
-            record.fine_amount = record.book.price + Decimal('5.00')
+            record.fine_amount = Decimal('0.00') # Paid immediately
             record.save()
             
-            # Update book status to LOST
             record.book.status = 'LOST'
             record.book.save()
             
-            messages.error(request, f"'{record.book.title}' marked as LOST.")
+            messages.success(request, f"'{record.book.title}' marked as LOST. Replacement fee of ₹{fine} PAID.")
             return redirect(f"{reverse('return_book')}?username={record.user.username}")
 
+        elif action == 'confirm_lost_pay_later':
+            fine_val = request.POST.get('fine_amount', '0.00')
+            try:
+                fine = Decimal(fine_val)
+            except:
+                fine = Decimal('0.00')
+
+            record.status = 'LOST'
+            record.fine_amount = fine # Added to account
+            record.save()
+            
+            record.book.status = 'LOST'
+            record.book.save()
+            
+            messages.warning(request, f"'{record.book.title}' marked as LOST. Replacement fee of ₹{fine} added to account.")
+            return redirect(f"{reverse('return_book')}?username={record.user.username}")
+
+        # --- Return Workflow ---
         # Check for Fine logic
         now = timezone.now()
         fine_amount = Decimal('0.00')
