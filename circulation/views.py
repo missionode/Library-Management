@@ -160,7 +160,7 @@ class ReturnBookView(LoginRequiredMixin, LibrarianRequiredMixin, View):
         context = {
             'returned_today_count': BorrowRecord.objects.filter(return_date__date=today).count(),
             'recent_returns': BorrowRecord.objects.filter(status='RETURNED').select_related('user', 'book').order_by('-return_date')[:5],
-            'members': User.objects.filter(role='MEMBER').values('username', 'first_name', 'last_name', 'email')
+            'members': User.objects.all().values('username', 'first_name', 'last_name', 'email', 'role', 'membership_tier__name')
         }
         return context
 
