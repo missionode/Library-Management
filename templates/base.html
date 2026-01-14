@@ -85,8 +85,12 @@
                 
                 <div class="hidden md:flex items-center space-x-8 font-medium">
                     <a href="{% url 'book_list' %}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Browse Catalog</a>
-                    {% if user.is_authenticated and user.role == 'MEMBER' %}
+                    {% if user.is_authenticated %}
                         <a href="{% url 'my_books' %}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">My Books</a>
+                    {% endif %}
+
+                    {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                        <a href="{% url 'analytics_dashboard' %}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Dashboard</a>
                     {% endif %}
                     
                     {% if user.is_authenticated %}
@@ -159,8 +163,10 @@
                 <a href="{% url 'book_list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Browse Catalog</a>
                 
                 {% if user.is_authenticated %}
-                    {% if user.role == 'MEMBER' %}
-                        <a href="{% url 'my_books' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">My Books</a>
+                    <a href="{% url 'my_books' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">My Books</a>
+
+                    {% if user.role == 'LIBRARIAN' or user.role == 'ADMIN' %}
+                        <a href="{% url 'analytics_dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
                     {% endif %}
 
                     {% if user.role == 'ADMIN' %}
